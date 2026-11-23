@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>SIK Anemia · Sistem Informasi Kesehatan Anemia</title>
+  <meta name="description" content="Pelajari anemia, lihat data WHO dan Kemenkes, lalu coba simulasi skrining berbasis ambang hemoglobin WHO 2024. Jawaban diproses di perangkat Anda dan tidak disimpan.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#0b7f77" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#071426" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:title" content="SIK Anemia · Sistem Informasi Kesehatan Anemia">
+  <meta property="og:description" content="Edukasi anemia, data WHO dan Kemenkes, serta simulasi skrining berbasis ambang Hb WHO 2024.">
+  <meta property="og:url" content="https://kuraimoss.github.io/mediaedukasiIV/">
+  <meta property="og:image" content="https://kuraimoss.github.io/mediaedukasiIV/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="SIK Anemia, Sistem Informasi Kesehatan Anemia: ilustrasi sel darah merah dan garis detak jantung">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@700;800&amp;display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Lewati ke konten utama</a>
+
+  <svg class="svg-defs" aria-hidden="true">
+    <defs>
+      <radialGradient id="grad-rbc" cx="40%" cy="34%" r="72%">
+        <stop offset="0" stop-color="#ff8f8f"/>
+        <stop offset="0.45" stop-color="#e8384f"/>
+        <stop offset="0.85" stop-color="#b3123a"/>
+        <stop offset="1" stop-color="#8a0f2e"/>
+      </radialGradient>
+      <radialGradient id="grad-rbc-dimple" cx="50%" cy="50%" r="50%">
+        <stop offset="0" stop-color="#9f1239" stop-opacity="0.85"/>
+        <stop offset="1" stop-color="#e8384f" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="grad-rbc-pale" cx="40%" cy="34%" r="72%">
+        <stop offset="0" stop-color="#ffd9dc"/>
+        <stop offset="0.5" stop-color="#f4a3ae"/>
+        <stop offset="1" stop-color="#d9788a"/>
+      </radialGradient>
+    </defs>
+    <symbol id="rbc" viewBox="-50 -50 100 100">
+      <circle r="46" fill="url(#grad-rbc)"/>
+      <circle r="24" fill="url(#grad-rbc-dimple)"/>
+      <path d="M-31-20a37 37 0 0 1 30-18" fill="none" stroke="#fff" stroke-opacity="0.5" stroke-width="5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="rbc-pale" viewBox="-50 -50 100 100">
+      <circle r="44" fill="url(#grad-rbc-pale)"/>
+      <circle r="22" fill="#e48a99" fill-opacity="0.35"/>
+      <path d="M-29-19a35 35 0 0 1 28-17" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M11 18l-6-6 6-6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M8 17v-5M13 17V8M18 17v-9"/></symbol>
+    <symbol id="i-activity" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol>
+    <symbol id="i-droplet" viewBox="0 0 24 24"><path d="M12 2.7s-6 6.6-6 11.3a6 6 0 0 0 12 0c0-4.7-6-11.3-6-11.3z"/></symbol>
+    <symbol id="i-utensils" viewBox="0 0 24 24"><path d="M4 2v7a3 3 0 0 0 3 3v10M10 2v7a3 3 0 0 1-3 3M7 2v6M17 22V2c-2.5 1-4 4-4 7v4h4"/></symbol>
+    <symbol id="i-pill" viewBox="0 0 24 24"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7z"/><path d="m8.5 8.5 7 7"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+    <symbol id="i-printer" viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/><path d="M3.5 11.5h5l1.5-2.5 2.5 5 1.5-2.5h6.5"/></symbol>
+    <symbol id="i-stethoscope" viewBox="0 0 24 24"><path d="M11 2v2M5 2v2M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"/><path d="M8 15a6 6 0 0 0 12 0v-3"/><circle cx="20" cy="10" r="2"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10z"/><path d="M2 21c0-3 1.9-5.4 5.2-6.1 2.4-.5 4.9-2 5.8-3.9"/></symbol>
+    <symbol id="i-citrus" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 5c.5-1.8 2-3 4-3"/><path d="M12 9v8M8 13h8M9.2 10.2l5.6 5.6M14.8 10.2l-5.6 5.6"/></symbol>
+    <symbol id="i-coffee" viewBox="0 0 24 24"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><path d="M6 2v2M10 2v2M14 2v2"/></symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.9 4.1L18 9l-4.1 1.9L12 15l-1.9-4.1L6 9l4.1-1.9z"/><path d="M19 15l.8 1.7 1.7.8-1.7.8L19 20l-.8-1.7-1.7-.8 1.7-.8z"/></symbol>
+    <symbol id="i-baby" viewBox="0 0 24 24"><path d="M9 12h.01M15 12h.01M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"/></symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24"><path d="M10 2v7.3L4.2 19.4A1.7 1.7 0 0 0 5.7 22h12.6a1.7 1.7 0 0 0 1.5-2.6L14 9.3V2"/><path d="M8.5 2h7M7 16h10"/></symbol>
+    <symbol id="i-wind" viewBox="0 0 24 24"><path d="M12.8 19.6A2 2 0 1 0 14 16H2M17.5 8a2.5 2.5 0 1 1 2 4H2M9.8 4.4A2 2 0 1 1 11 8H2"/></symbol>
+    <symbol id="i-battery" viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M22 11v2M6 11v2"/></symbol>
+    <symbol id="i-virus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5M4.9 4.9l3.5 3.5M15.6 15.6l3.5 3.5M4.9 19.1l3.5-3.5M15.6 8.4l3.5-3.5"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+    <symbol id="i-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4"/><path d="M3.3 19a10 10 0 1 1 17.4 0"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></symbol>
+    <symbol id="i-baby-bump" viewBox="0 0 24 24"><circle cx="11" cy="4" r="2"/><path d="M9 22v-6l-1-4 2-5h2c3 1 5 3.5 5 6.5S15 17 12 17v5"/></symbol>
+  </svg>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="#/" aria-label="SIK Anemia, kembali ke beranda">
+        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+          <rect width="48" height="48" rx="14" class="brand-mark-bg"/>
+          <use href="#rbc" x="9" y="9" width="30" height="30"/>
+          <path d="M21 24h6M24 21v6" class="brand-mark-plus"/>
+        </svg>
+        <span class="brand-text">
+          <strong>SIK Anemia</strong>
+          <small>Sistem Informasi Kesehatan Anemia</small>
+        </span>
+      </a>
+      <nav class="site-nav" id="site-nav" aria-label="Navigasi utama">
+        <ul class="nav-list">
+          <li><a class="nav-link" href="#/" data-nav="beranda"><svg class="icon" aria-hidden="true"><use href="#i-home"/></svg>Beranda</a></li>
+          <li><a class="nav-link" href="#/informasi" data-nav="informasi"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>Informasi Anemia</a></li>
+          <li><a class="nav-link" href="#/data" data-nav="data"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg>Data Anemia</a></li>
+          <li><a class="nav-link" href="#/simulasi" data-nav="simulasi"><svg class="icon" aria-hidden="true"><use href="#i-activity"/></svg>Simulasi</a></li>
+        </ul>
+        <a class="btn btn-primary nav-cta" href="#/simulasi">Mulai Simulasi<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-btn js-only" type="button" id="theme-toggle" aria-pressed="false" aria-label="Mode gelap">
+          <svg class="icon icon-moon" aria-hidden="true"><use href="#i-moon"/></svg>
+          <svg class="icon icon-sun" aria-hidden="true"><use href="#i-sun"/></svg>
+        </button>
+        <a class="btn btn-primary btn-sm header-cta" href="#/simulasi">Mulai Simulasi</a>
+        <button class="icon-btn nav-toggle js-only" type="button" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Buka menu">
+          <svg class="icon icon-open" aria-hidden="true"><use href="#i-menu"/></svg>
+          <svg class="icon icon-close" aria-hidden="true"><use href="#i-x"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="scroll-progress" aria-hidden="true"><span id="scroll-progress-bar"></span></div>
+  </header>
+
+  <noscript>
+    <p class="noscript-note">JavaScript nonaktif. Materi edukasi tetap dapat dibaca, tetapi grafik dan simulasi skrining memerlukan JavaScript.</p>
+  </noscript>
+
+  <main id="main" tabindex="-1">
+
+    <!-- ============================== BERANDA ============================== -->
+    <section class="page is-active" id="page-beranda" data-page="beranda" data-title="Beranda" aria-labelledby="beranda-title">
+      <div class="hero">
+        <div class="hero-bg" aria-hidden="true">
+          <span class="blob blob-1"></span>
+          <span class="blob blob-2"></span>
+          <span class="blob blob-3"></span>
+          <span class="hero-grid"></span>
+        </div>
+        <div class="container hero-inner">
+          <div class="hero-copy">
+            <p class="eyebrow hero-in"><span class="pulse-dot" aria-hidden="true"></span>Sistem Informasi Kesehatan Anemia</p>
+            <h1 class="hero-title hero-in" id="beranda-title" tabindex="-1">Kenali anemia lebih awal, <span class="text-gradient">jaga energi</span> setiap hari.</h1>
+            <p class="hero-lead hero-in">Anemia terjadi ketika jumlah sel darah merah atau kadar hemoglobin (Hb) di dalamnya lebih rendah dari normal, sehingga oksigen tidak tersalurkan dengan baik ke seluruh tubuh. Pelajari tanda, penyebab, dan pencegahannya, lalu coba simulasi skrining berbasis ambang Hb WHO 2024.</p>
+            <div class="hero-actions hero-in">
+              <a class="btn btn-primary btn-lg" href="#/simulasi">Mulai Simulasi<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+              <a class="btn btn-ghost btn-lg" href="#/informasi"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>Pelajari Anemia</a>
+            </div>
+            <ul class="hero-trust hero-in">
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Ambang Hb WHO 2024</li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg>Data WHO dan Kemenkes</li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Jawaban tidak disimpan</li>
+            </ul>
+          </div>
+
+          <div class="hero-visual" aria-hidden="true">
+            <svg class="hero-art" viewBox="0 0 560 540">
+              <defs>
+                <radialGradient id="grad-orb" cx="38%" cy="28%" r="78%">
+                  <stop offset="0" class="orb-stop-1"/>
+                  <stop offset="0.6" class="orb-stop-2"/>
+                  <stop offset="1" class="orb-stop-3"/>
+                </radialGradient>
+                <linearGradient id="grad-vessel" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#fecdd3" stop-opacity="0"/>
+                  <stop offset="0.3" stop-color="#fda4af" stop-opacity="0.55"/>
+                  <stop offset="0.7" stop-color="#fb7185" stop-opacity="0.42"/>
+                  <stop offset="1" stop-color="#fecdd3" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="grad-ecg" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#14b8a6" stop-opacity="0"/>
+                  <stop offset="0.25" stop-color="#14b8a6"/>
+                  <stop offset="1" stop-color="#22d3ee"/>
+                </linearGradient>
+                <clipPath id="clip-orb"><circle cx="280" cy="270" r="196"/></clipPath>
+              </defs>
+              <circle class="orb-halo" cx="280" cy="270" r="252"/>
+              <circle class="orb-ring" cx="280" cy="270" r="226"/>
+              <circle class="orb" cx="280" cy="270" r="196" fill="url(#grad-orb)"/>
+              <g clip-path="url(#clip-orb)">
+                <g transform="rotate(-18 280 270)">
+                  <rect x="10" y="200" width="540" height="140" rx="70" fill="url(#grad-vessel)"/>
+                  <g class="cells">
+                    <g class="cell c1"><use href="#rbc" x="-40" y="208" width="66" height="66"/></g>
+                    <g class="cell c2"><use href="#rbc" x="-40" y="262" width="56" height="56"/></g>
+                    <g class="cell c3"><use href="#rbc" x="-40" y="230" width="48" height="48"/></g>
+                    <g class="cell c4"><use href="#rbc" x="-40" y="276" width="60" height="60"/></g>
+                    <g class="cell c5"><use href="#rbc" x="-40" y="214" width="52" height="52"/></g>
+                    <g class="cell c6"><use href="#rbc" x="-40" y="250" width="44" height="44"/></g>
+                    <g class="cell c7"><use href="#rbc" x="-40" y="224" width="58" height="58"/></g>
+                  </g>
+                </g>
+                <g class="o2-bubble b1"><circle cx="176" cy="150" r="15"/><text x="176" y="155">O₂</text></g>
+                <g class="o2-bubble b2"><circle cx="388" cy="132" r="12"/><text x="388" y="136">O₂</text></g>
+                <g class="o2-bubble b3"><circle cx="360" cy="392" r="14"/><text x="360" y="397">O₂</text></g>
+                <g class="o2-bubble b4"><circle cx="196" cy="384" r="11"/><text x="196" y="388">O₂</text></g>
+              </g>
+              <circle class="orb-edge" cx="280" cy="270" r="196"/>
+              <path class="ecg" d="M60 452h96l14-30 18 58 22-104 20 76 14-30h250" pathLength="1"/>
+              <g transform="translate(76 112)"><g class="float f1"><path class="plus" d="M-13 0h26M0-13v26"/></g></g>
+              <g transform="translate(506 168)"><g class="float f2"><path class="plus plus-sm" d="M-9 0h18M0-9v18"/></g></g>
+              <g transform="translate(486 446)"><g class="float f3"><g transform="rotate(35)"><rect x="-26" y="-11" width="52" height="22" rx="11" class="capsule-shell"/><path d="M-15-11h15v22h-15a11 11 0 0 1 0-22z" class="capsule-fill"/></g></g></g>
+              <g transform="translate(58 318)"><g class="float f4"><path d="M0-24C9-11 15-3 15 6a15 15 0 0 1-30 0c0-9 6-17 15-30z" fill="url(#grad-rbc)"/><path d="M-7 2a8 8 0 0 0 4 9" class="droplet-shine"/></g></g>
+              <g transform="translate(446 64)"><g class="float f5"><polygon class="hex" points="0,-20 17.3,-10 17.3,10 0,20 -17.3,10 -17.3,-10"/><text class="hex-label" x="0" y="5">Fe</text></g></g>
+            </svg>
+            <div class="glass-card float-card card-a">
+              <span class="float-card-icon"><svg class="icon" aria-hidden="true"><use href="#i-droplet"/></svg></span>
+              <span class="float-card-text"><small>Batas anemia perempuan dewasa</small><strong>&lt; 12,0 g/dL</strong><em>WHO 2024</em></span>
+            </div>
+            <div class="glass-card float-card card-b">
+              <span class="float-card-icon icon-teal"><svg class="icon" aria-hidden="true"><use href="#i-wind"/></svg></span>
+              <span class="float-card-text"><small>Hemoglobin</small><strong>Pengangkut O₂</strong><em>ke otak, otot, dan organ</em></span>
+            </div>
+            <div class="glass-card float-card card-c">
+              <strong class="card-c-num">30,7%</strong>
+              <span class="float-card-text"><small>perempuan 15–49 tahun di dunia mengalami anemia</small><em>WHO, data 2023</em></span>
+            </div>
+          </div>
+        </div>
+        <a class="scroll-cue" href="#apa-itu-anemia" aria-label="Gulir ke penjelasan anemia"><span aria-hidden="true"></span></a>
+      </div>
+
+      <section class="section" id="apa-itu-anemia">
+        <div class="container split">
+          <div class="split-copy reveal">
+            <p class="section-kicker">Apa itu anemia?</p>
+            <h2 class="section-title">Saat darah kekurangan pengangkut oksigen</h2>
+            <p>Hemoglobin adalah protein kaya zat besi di dalam sel darah merah. Tugasnya mengikat oksigen di paru-paru lalu mengantarkannya ke seluruh tubuh. Bila kadar Hb terlalu rendah, organ dan otot mendapat oksigen lebih sedikit sehingga tubuh mudah lelah, pucat, dan sulit berkonsentrasi.</p>
+            <ul class="check-list">
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>Anemia ditentukan dari <strong>kadar Hb dalam darah</strong> yang dibandingkan dengan ambang sesuai usia, jenis kelamin, dan kehamilan.</span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>Penyebab tersering adalah <strong>kekurangan zat besi</strong>, tetapi infeksi, penyakit kronis, dan kelainan bawaan juga dapat menyebabkannya.</span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>Anemia <strong>dapat dicegah dan diobati</strong> sesuai penyebabnya.</span></li>
+            </ul>
+            <a class="link-arrow" href="#/informasi">Baca materi lengkap<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+          </div>
+          <figure class="compare-figure reveal">
+            <svg class="compare-art" viewBox="0 0 520 250" role="img" aria-labelledby="compare-title">
+              <title id="compare-title">Ilustrasi perbandingan darah normal yang berisi banyak sel darah merah dan darah pada anemia yang sel darah merahnya lebih sedikit dan pucat</title>
+              <defs>
+                <clipPath id="clip-view-a"><circle cx="130" cy="118" r="100"/></clipPath>
+                <clipPath id="clip-view-b"><circle cx="390" cy="118" r="100"/></clipPath>
+              </defs>
+              <circle class="view-bg" cx="130" cy="118" r="100"/>
+              <g clip-path="url(#clip-view-a)">
+                <use href="#rbc" x="53" y="47" width="50" height="50"/>
+                <use href="#rbc" x="105" y="37" width="50" height="50"/>
+                <use href="#rbc" x="157" y="55" width="50" height="50"/>
+                <use href="#rbc" x="37" y="99" width="50" height="50"/>
+                <use href="#rbc" x="87" y="87" width="50" height="50"/>
+                <use href="#rbc" x="139" y="99" width="50" height="50"/>
+                <use href="#rbc" x="183" y="103" width="50" height="50"/>
+                <use href="#rbc" x="63" y="141" width="50" height="50"/>
+                <use href="#rbc" x="115" y="141" width="50" height="50"/>
+                <use href="#rbc" x="165" y="145" width="50" height="50"/>
+                <use href="#rbc" x="95" y="185" width="50" height="50"/>
+                <use href="#rbc" x="29" y="55" width="40" height="40"/>
+                <use href="#rbc" x="149" y="3" width="44" height="44"/>
+              </g>
+              <circle class="view-ring" cx="130" cy="118" r="100"/>
+              <circle class="view-bg" cx="390" cy="118" r="100"/>
+              <g clip-path="url(#clip-view-b)">
+                <use href="#rbc-pale" x="330" y="58" width="48" height="48"/>
+                <use href="#rbc-pale" x="402" y="72" width="44" height="44"/>
+                <use href="#rbc-pale" x="356" y="128" width="46" height="46"/>
+                <use href="#rbc-pale" x="420" y="142" width="42" height="42"/>
+                <use href="#rbc-pale" x="306" y="132" width="38" height="38"/>
+                <use href="#rbc-pale" x="380" y="186" width="40" height="40"/>
+              </g>
+              <circle class="view-ring" cx="390" cy="118" r="100"/>
+            </svg>
+            <figcaption class="compare-caption">
+              <span><strong>Darah normal</strong> sel darah merah cukup dan kaya hemoglobin</span>
+              <span><strong>Anemia</strong> sel darah merah atau hemoglobin lebih sedikit</span>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section section-tint">
+        <div class="container">
+          <div class="section-head reveal">
+            <p class="section-kicker">Anemia dalam angka</p>
+            <h2 class="section-title">Masalah kesehatan yang masih dekat dengan kita</h2>
+            <p class="section-lead">Angka berikut berasal dari estimasi WHO dan survei nasional Kementerian Kesehatan. Tahun data tertera di setiap kartu.</p>
+          </div>
+          <div class="stat-grid" data-stagger>
+            <article class="stat-card card-spot">
+              <p class="stat-value"><span class="count" data-count="39.8" data-decimals="1">39,8</span><span class="stat-unit">%</span></p>
+              <p class="stat-label">anak usia 6–59 bulan di dunia mengalami anemia</p>
+              <p class="stat-source">WHO GHO · data 2019</p>
+            </article>
+            <article class="stat-card card-spot">
+              <p class="stat-value"><span class="count" data-count="30.7" data-decimals="1">30,7</span><span class="stat-unit">%</span></p>
+              <p class="stat-label">perempuan usia 15–49 tahun di dunia mengalami anemia</p>
+              <p class="stat-source">WHO GHO · data 2023</p>
+            </article>
+            <article class="stat-card card-spot">
+              <p class="stat-value"><span class="count" data-count="27.7" data-decimals="1">27,7</span><span class="stat-unit">%</span></p>
+              <p class="stat-label">ibu hamil di Indonesia mengalami anemia</p>
+              <p class="stat-source">SKI 2023 · Kemenkes</p>
+            </article>
+            <article class="stat-card card-spot">
+              <p class="stat-value"><span class="count" data-count="54.8" data-decimals="1">54,8</span><span class="stat-unit">%</span></p>
+              <p class="stat-label">remaja putri Indonesia belum pernah mendapatkan Tablet Tambah Darah</p>
+              <p class="stat-source">SKI 2023 · BKPK Kemenkes</p>
+            </article>
+          </div>
+          <p class="center-link reveal"><a class="link-arrow" href="#/data">Lihat grafik dan sumber data<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a></p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head reveal">
+            <p class="section-kicker">Ringkasan faktor risiko</p>
+            <h2 class="section-title">Siapa yang lebih mudah terkena anemia?</h2>
+            <p class="section-lead">WHO menyebut balita, remaja putri dan perempuan yang menstruasi, serta ibu hamil dan nifas sebagai kelompok paling rentan. Faktor berikut ikut memperbesar risikonya.</p>
+          </div>
+          <div class="card-grid cols-3" data-stagger>
+            <article class="info-card card-spot">
+              <span class="info-icon"><svg class="icon" aria-hidden="true"><use href="#i-utensils"/></svg></span>
+              <h3>Asupan zat besi kurang</h3>
+              <p>Menu harian yang jarang berisi daging, ikan, telur, kacang-kacangan, atau sayuran hijau.</p>
+            </article>
+            <article class="info-card card-spot">
+              <span class="info-icon icon-rose"><svg class="icon" aria-hidden="true"><use href="#i-droplet"/></svg></span>
+              <h3>Kehilangan darah</h3>
+              <p>Menstruasi yang banyak atau lama, perdarahan saat atau setelah persalinan, dan perdarahan lain.</p>
+            </article>
+            <article class="info-card card-spot">
+              <span class="info-icon"><svg class="icon" aria-hidden="true"><use href="#i-baby-bump"/></svg></span>
+              <h3>Kehamilan</h3>
+              <p>Volume darah dan kebutuhan zat besi meningkat untuk ibu dan pertumbuhan janin.</p>
+            </article>
+            <article class="info-card card-spot">
+              <span class="info-icon icon-rose"><svg class="icon" aria-hidden="true"><use href="#i-virus"/></svg></span>
+              <h3>Infeksi</h3>
+              <p>Kecacingan, malaria, tuberkulosis, dan HIV dapat mengganggu penyerapan gizi atau menyebabkan kehilangan darah.</p>
+            </article>
+            <article class="info-card card-spot">
+              <span class="info-icon"><svg class="icon" aria-hidden="true"><use href="#i-stethoscope"/></svg></span>
+              <h3>Penyakit kronis</h3>
+              <p>Peradangan jangka panjang dan penyakit kronis dapat menghambat pembentukan sel darah merah.</p>
+            </article>
+            <article class="info-card card-spot">
+              <span class="info-icon"><svg class="icon" aria-hidden="true"><use href="#i-flask"/></svg></span>
+              <h3>Kekurangan vitamin dan faktor bawaan</h3>
+              <p>Kurang folat, vitamin B12, atau vitamin A, serta kelainan darah bawaan seperti talasemia.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-tint">
+        <div class="container split split-reverse">
+          <div class="split-copy reveal">
+            <p class="section-kicker">Ringkasan gejala</p>
+            <h2 class="section-title">Tanda yang sering muncul</h2>
+            <p>Gejala anemia sering tidak khas dan bisa mirip kondisi lain. Masyarakat mengenalnya sebagai <strong>5L</strong>: lemah, letih, lesu, lelah, dan lalai. Satu-satunya cara memastikan anemia adalah memeriksa kadar Hb.</p>
+            <a class="link-arrow" href="#/simulasi">Cek indikator risiko Anda<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+          </div>
+          <ul class="symptom-cloud reveal" data-stagger>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-battery"/></svg>Lemas dan mudah lelah</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-activity"/></svg>Pusing atau kepala terasa ringan</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-droplet"/></svg>Pucat di kulit, bibir, dan kuku</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-wind"/></svg>Sesak napas saat beraktivitas</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-heart"/></svg>Jantung berdebar</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-sparkle"/></svg>Tangan dan kaki terasa dingin</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>Sakit kepala</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg>Sulit berkonsentrasi</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head reveal">
+            <p class="section-kicker">Informasi pencegahan</p>
+            <h2 class="section-title">Langkah kecil yang menjaga kadar Hb</h2>
+          </div>
+          <div class="card-grid cols-3" data-stagger>
+            <article class="prevent-card card-spot">
+              <span class="prevent-num">01</span>
+              <h3>Makan sumber zat besi</h3>
+              <p>Hati, daging merah, ikan, ayam, telur, kacang-kacangan, dan sayuran hijau tua.</p>
+            </article>
+            <article class="prevent-card card-spot">
+              <span class="prevent-num">02</span>
+              <h3>Tambahkan vitamin C</h3>
+              <p>Jeruk, jambu biji, pepaya, atau tomat membantu tubuh menyerap zat besi.</p>
+            </article>
+            <article class="prevent-card card-spot">
+              <span class="prevent-num">03</span>
+              <h3>Beri jeda teh dan kopi</h3>
+              <p>Teh dan kopi menghambat penyerapan zat besi bila diminum bersamaan dengan makan.</p>
+            </article>
+            <article class="prevent-card card-spot">
+              <span class="prevent-num">04</span>
+              <h3>Minum TTD sesuai anjuran</h3>
+              <p>Remaja putri 1 tablet per minggu. Ibu hamil TTD atau MMS setiap hari sesuai anjuran tenaga kesehatan.</p>
+            </article>
+            <article class="prevent-card card-spot">
+              <span class="prevent-num">05</span>
+              <h3>Cegah infeksi</h3>
+              <p>Cuci tangan pakai sabun, gunakan jamban bersih, dan minum obat cacing sesuai program.</p>
+            </article>
+            <article class="prevent-card card-spot">
+              <span class="prevent-num">06</span>
+              <h3>Periksa Hb berkala</h3>
+              <p>Manfaatkan skrining di sekolah, Posyandu, Puskesmas, dan pemeriksaan kehamilan.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-cta">
+        <div class="container">
+          <div class="cta-band reveal">
+            <div class="cta-copy">
+              <h2>Siap mengecek indikator risiko Anda?</h2>
+              <p>Simulasi 6 langkah, sekitar 3 menit. Semua jawaban diproses di perangkat Anda dan hilang saat halaman ditutup.</p>
+            </div>
+            <a class="btn btn-light btn-lg" href="#/simulasi">Mulai Simulasi<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- ============================== INFORMASI ============================== -->
+    <section class="page" id="page-informasi" data-page="informasi" data-title="Informasi Anemia" aria-labelledby="informasi-title">
+      <header class="page-hero">
+        <div class="container">
+          <p class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span>Materi edukasi</p>
+          <h1 class="page-title" id="informasi-title" tabindex="-1">Informasi Anemia</h1>
+          <p class="page-lead">Panduan ringkas tentang anemia: apa itu, bagaimana hemoglobin bekerja, penyebab, tingkat keparahan menurut WHO 2024, gejala, pencegahan, dan kapan perlu memeriksakan diri.</p>
+        </div>
+      </header>
+      <div class="container info-layout">
+        <nav class="toc" aria-label="Daftar isi informasi anemia">
+          <p class="toc-title">Daftar isi</p>
+          <ol class="toc-list">
+            <li><a href="#info-pengertian">Pengertian anemia</a></li>
+            <li><a href="#info-hemoglobin">Fungsi hemoglobin</a></li>
+            <li><a href="#info-jenis">Jenis dan penyebab</a></li>
+            <li><a href="#info-keparahan">Tingkat keparahan</a></li>
+            <li><a href="#info-risiko">Faktor risiko</a></li>
+            <li><a href="#info-gejala">Gejala dan dampak</a></li>
+            <li><a href="#info-pencegahan">Pencegahan</a></li>
+            <li><a href="#info-penanganan">Penanganan dan pemeriksaan</a></li>
+          </ol>
+        </nav>
+
+        <div class="info-content">
+          <article class="info-section" id="info-pengertian" tabindex="-1">
+            <h2 class="info-title reveal"><span class="info-num">01</span>Pengertian anemia</h2>
+            <div class="reveal">
+              <p>Menurut WHO, anemia adalah kondisi ketika <strong>jumlah sel darah merah atau konsentrasi hemoglobin di dalamnya lebih rendah dari normal</strong>. Akibatnya, darah tidak mampu membawa oksigen yang cukup ke organ dan jaringan tubuh.</p>
+              <p>Anemia bukan penyakit tunggal. WHO memandangnya sebagai tanda adanya kondisi lain yang mendasarinya, misalnya kekurangan gizi, infeksi, perdarahan, atau penyakit tertentu. Karena itu, penanganannya selalu mengikuti penyebab.</p>
+            </div>
+            <blockquote class="quote-card reveal">
+              <p>Anemia ditegakkan berdasarkan kadar hemoglobin darah yang berada di bawah ambang tertentu sesuai usia, jenis kelamin, dan status fisiologis seperti kehamilan.</p>
+              <footer>Ringkasan dari <cite>WHO Fact sheet: Anaemia</cite></footer>
+            </blockquote>
+          </article>
+
+          <article class="info-section" id="info-hemoglobin" tabindex="-1">
+            <h2 class="info-title reveal"><span class="info-num">02</span>Fungsi hemoglobin</h2>
+            <p class="reveal">Hemoglobin adalah protein di dalam sel darah merah yang mengandung zat besi. Zat besi inilah yang membuat Hb dapat mengikat oksigen. Tanpa zat besi yang cukup, tubuh tidak dapat membentuk hemoglobin dalam jumlah memadai.</p>
+            <ol class="o2-flow reveal" data-stagger>
+              <li class="o2-step">
+                <span class="o2-icon"><svg class="icon" aria-hidden="true"><use href="#i-wind"/></svg></span>
+                <h3>Paru-paru</h3>
+                <p>Oksigen dari udara masuk ke darah.</p>
+              </li>
+              <li class="o2-step">
+                <span class="o2-icon icon-rose"><svg class="icon" aria-hidden="true"><use href="#i-droplet"/></svg></span>
+                <h3>Hemoglobin mengikat O₂</h3>
+                <p>Setiap sel darah merah membawa jutaan molekul Hb.</p>
+              </li>
+              <li class="o2-step">
+                <span class="o2-icon icon-rose"><svg class="icon" aria-hidden="true"><use href="#i-heart"/></svg></span>
+                <h3>Jantung memompa</h3>
+                <p>Darah kaya oksigen dialirkan ke seluruh tubuh.</p>
+              </li>
+              <li class="o2-step">
+                <span class="o2-icon"><svg class="icon" aria-hidden="true"><use href="#i-activity"/></svg></span>
+                <h3>Organ dan otot</h3>
+                <p>Otak, otot, dan organ memakai oksigen untuk menghasilkan energi.</p>
+              </li>
+            </ol>
+          </article>
+
+          <article class="info-section" id="info-jenis" tabindex="-1">
+            <h2 class="info-title reveal"><span class="info-num">03</span>Jenis dan penyebab anemia</h2>
+            <p class="reveal">Anemia dikelompokkan menurut penyebabnya. Beberapa jenis yang umum dikenal:</p>
+            <div class="card-grid cols-2" data-stagger>
+              <article class="type-card card-spot">
+                <h3>Anemia defisiensi besi</h3>
+                <p>Jenis paling umum. Terjadi karena asupan zat besi kurang, penyerapan terganggu, kebutuhan meningkat (misalnya saat hamil), atau kehilangan darah.</p>
+              </article>
+              <article class="type-card card-spot">
+                <h3>Kekurangan folat dan vitamin B12</h3>
+                <p>Kedua zat gizi ini dibutuhkan untuk membentuk sel darah merah. Kekurangannya membuat sel darah merah tidak terbentuk dengan baik.</p>
+              </article>
+              <article class="type-card card-spot">
+                <h3>Anemia akibat peradangan atau penyakit kronis</h3>
+                <p>Infeksi jangka panjang, penyakit ginjal, dan penyakit kronis lain dapat menghambat pemakaian zat besi dan pembentukan darah.</p>
+              </article>
+              <article class="type-card card-spot">
+                <h3>Anemia akibat perdarahan</h3>
+                <p>Perdarahan menstruasi yang banyak, perdarahan saat atau setelah persalinan, dan perdarahan saluran cerna menguras cadangan zat besi.</p>
+              </article>
+              <article class="type-card card-spot">
+                <h3>Anemia karena infeksi</h3>
+                <p>Malaria, kecacingan, schistosomiasis, tuberkulosis, dan HIV dapat merusak sel darah merah atau menyebabkan kehilangan zat gizi.</p>
+              </article>
+              <article class="type-card card-spot">
+                <h3>Kelainan sel darah merah bawaan</h3>
+                <p>Talasemia, penyakit sel sabit, dan kelainan Hb lain diturunkan dalam keluarga dan memengaruhi pembentukan atau bentuk hemoglobin.</p>
+              </article>
+            </div>
+            <p class="note reveal"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg><span>Jenis anemia hanya dapat dipastikan oleh tenaga kesehatan melalui pemeriksaan laboratorium. Simulasi di situs ini <strong>tidak menentukan jenis anemia</strong>.</span></p>
+          </article>
+
+          <article class="info-section" id="info-keparahan" tabindex="-1">
+            <h2 class="info-title reveal"><span class="info-num">04</span>Tingkat keparahan menurut WHO 2024</h2>
+            <p class="reveal">WHO memperbarui ambang kadar hemoglobin pada tahun 2024. Kadar Hb dibandingkan dengan ambang kelompok yang sesuai, lalu dikategorikan menjadi tidak anemia, anemia ringan, sedang, atau berat.</p>
+            <div class="severity-legend reveal">
+              <span class="sev sev-none">Tidak anemia</span>
+              <span class="sev sev-mild">Ringan</span>
+              <span class="sev sev-moderate">Sedang</span>
+              <span class="sev sev-severe">Berat</span>
+            </div>
+            <table class="who-table reveal" id="who-table">
+              <caption>Ambang kadar hemoglobin (g/dL) untuk menentukan anemia dan tingkat keparahannya, sebelum penyesuaian ketinggian tempat tinggal dan kebiasaan merokok</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Kelompok populasi</th>
+                  <th scope="col">Tidak anemia</th>
+                  <th scope="col">Ringan</th>
+                  <th scope="col">Sedang</th>
+                  <th scope="col">Berat</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-group="child-6-23m"><th scope="row">Anak usia 6–23 bulan</th><td data-col="none" data-label="Tidak anemia">≥ 10,5</td><td data-col="mild" data-label="Ringan">9,5–10,4</td><td data-col="moderate" data-label="Sedang">7,0–9,4</td><td data-col="severe" data-label="Berat">&lt; 7,0</td></tr>
+                <tr data-group="child-24-59m"><th scope="row">Anak usia 24–59 bulan</th><td data-col="none" data-label="Tidak anemia">≥ 11,0</td><td data-col="mild" data-label="Ringan">10,0–10,9</td><td data-col="moderate" data-label="Sedang">7,0–9,9</td><td data-col="severe" data-label="Berat">&lt; 7,0</td></tr>
+                <tr data-group="child-5-11y"><th scope="row">Anak usia 5–11 tahun</th><td data-col="none" data-label="Tidak anemia">≥ 11,5</td><td data-col="mild" data-label="Ringan">11,0–11,4</td><td data-col="moderate" data-label="Sedang">8,0–10,9</td><td data-col="severe" data-label="Berat">&lt; 8,0</td></tr>
+                <tr data-group="adolescent-12-14y"><th scope="row">Remaja 12–14 tahun (perempuan tidak hamil dan laki-laki)</th><td data-col="none" data-label="Tidak anemia">≥ 12,0</td><td data-col="mild" data-label="Ringan">11,0–11,9</td><td data-col="moderate" data-label="Sedang">8,0–10,9</td><td data-col="severe" data-label="Berat">&lt; 8,0</td></tr>
+                <tr data-group="women-15-65y"><th scope="row">Perempuan tidak hamil 15–65 tahun</th><td data-col="none" data-label="Tidak anemia">≥ 12,0</td><td data-col="mild" data-label="Ringan">11,0–11,9</td><td data-col="moderate" data-label="Sedang">8,0–10,9</td><td data-col="severe" data-label="Berat">&lt; 8,0</td></tr>
+                <tr data-group="men-15-65y"><th scope="row">Laki-laki 15–65 tahun</th><td data-col="none" data-label="Tidak anemia">≥ 13,0</td><td data-col="mild" data-label="Ringan">11,0–12,9</td><td data-col="moderate" data-label="Sedang">8,0–10,9</td><td data-col="severe" data-label="Berat">&lt; 8,0</td></tr>
+                <tr data-group="pregnant-t1"><th scope="row">Ibu hamil trimester 1</th><td data-col="none" data-label="Tidak anemia">≥ 11,0</td><td data-col="mild" data-label="Ringan">10,0–10,9</td><td data-col="moderate" data-label="Sedang">7,0–9,9</td><td data-col="severe" data-label="Berat">&lt; 7,0</td></tr>
+                <tr data-group="pregnant-t2"><th scope="row">Ibu hamil trimester 2</th><td data-col="none" data-label="Tidak anemia">≥ 10,5</td><td data-col="mild" data-label="Ringan">9,5–10,4</td><td data-col="moderate" data-label="Sedang">7,0–9,4</td><td data-col="severe" data-label="Berat">&lt; 7,0</td></tr>
+                <tr data-group="pregnant-t3"><th scope="row">Ibu hamil trimester 3</th><td data-col="none" data-label="Tidak anemia">≥ 11,0</td><td data-col="mild" data-label="Ringan">10,0–10,9</td><td data-col="moderate" data-label="Sedang">7,0–9,9</td><td data-col="severe" data-label="Berat">&lt; 7,0</td></tr>
+              </tbody>
+            </table>
+            <p class="table-source reveal">Sumber: WHO. <a href="https://www.ncbi.nlm.nih.gov/books/NBK602183/table/fm-ch1.tab2/" target="_blank" rel="noopener noreferrer">Guideline on haemoglobin cutoffs to define anaemia in individuals and populations</a>, 2024. WHO menyajikan nilai dalam g/L; 10 g/L = 1 g/dL. Tabel WHO 2024 mencakup usia 6 bulan sampai 65 tahun.</p>
+            <div class="adjust-grid reveal">
+              <section class="adjust-card">
+                <h3><svg class="icon" aria-hidden="true"><use href="#i-gauge"/></svg>Penyesuaian ketinggian tempat tinggal</h3>
+                <p>Tinggal di dataran tinggi meningkatkan kadar Hb. WHO 2024 menganjurkan Hb terukur dikurangi sesuai ketinggian sebelum dibandingkan dengan ambang.</p>
+                <table class="mini-table">
+                  <caption class="sr-only">Pengurangan kadar Hb menurut ketinggian tempat tinggal</caption>
+                  <thead><tr><th scope="col">Ketinggian (mdpl)</th><th scope="col">Dikurangi (g/dL)</th></tr></thead>
+                  <tbody>
+                    <tr><td>500–999</td><td>0,4</td></tr>
+                    <tr><td>1.000–1.499</td><td>0,8</td></tr>
+                    <tr><td>1.500–1.999</td><td>1,1</td></tr>
+                    <tr><td>2.000–2.499</td><td>1,4</td></tr>
+                    <tr><td>2.500–2.999</td><td>1,8</td></tr>
+                    <tr><td>3.000 ke atas</td><td>2,1–3,3</td></tr>
+                  </tbody>
+                </table>
+              </section>
+              <section class="adjust-card">
+                <h3><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>Penyesuaian kebiasaan merokok</h3>
+                <p>Merokok juga menaikkan kadar Hb, sehingga WHO 2024 menganjurkan pengurangan berikut untuk perokok.</p>
+                <table class="mini-table">
+                  <caption class="sr-only">Pengurangan kadar Hb menurut jumlah rokok per hari</caption>
+                  <thead><tr><th scope="col">Rokok per hari</th><th scope="col">Dikurangi (g/dL)</th></tr></thead>
+                  <tbody>
+                    <tr><td>Jumlah tidak tentu</td><td>0,3</td></tr>
+                    <tr><td>Kurang dari 10 batang</td><td>0,3</td></tr>
+                    <tr><td>10–19 batang</td><td>0,5</td></tr>
+                    <tr><td>20 batang atau lebih</td><td>0,6</td></tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
+          </article>
+
+          <article class="info-section" id="info-risiko" tabindex="-1">
+            <h2 class="info-title reveal"><span class="info-num">05</span>Faktor risiko</h2>
+            <div class="risk-columns reveal">
+              <section class="risk-col">
+                <h3>Kelompok paling rentan</h3>
+                <ul class="dot-list">
+                  <li>Anak di bawah 5 tahun, terutama di bawah 2 tahun</li>
+                  <li>Remaja putri dan perempuan yang menstruasi</li>
+                  <li>Ibu hamil dan ibu setelah melahirkan</li>
+                </ul>
+              </section>
+              <section class="risk-col">
+                <h3>Faktor yang memperbesar risiko</h3>
+                <ul class="dot-list">
+                  <li>Pola makan rendah zat besi, folat, vitamin B12, atau vitamin A</li>
+                  <li>Menstruasi yang banyak atau lama</li>
+                  <li>Infeksi seperti kecacingan dan malaria</li>
+                  <li>Penyakit kronis dan peradangan</li>
+                  <li>Riwayat keluarga dengan kelainan darah bawaan</li>
+                  <li>Jarak kehamilan yang terlalu dekat</li>
+                </ul>
+              </section>
+            </div>
+          </article>
+
+          <article class="info-section" id="info-gejala" tabindex="-1">
+            <h2 class="info-title reveal"><span class="info-num">06</span>Gejala dan dampak</h2>
+            <div class="card-grid cols-2" data-stagger>
+              <section class="symptom-card card-spot">
+                <h3>Gejala umum</h3>
+                <ul class="dot-list">
+                  <li>Mudah lelah dan kemampuan kerja fisik menurun</li>
+                  <li>Pusing atau kepala terasa ringan</li>
+                  <li>Tangan dan kaki dingin</li>
+                  <li>Sakit kepala</li>
+                  <li>Sesak napas, terutama saat beraktivitas</li>
+                </ul>
+              </section>
+              <section class="symptom-card symptom-card-alert card-spot">
+                <h3>Gejala pada anemia berat</h3>
+                <ul class="dot-list">
+                  <li>Pucat pada bibir, mulut, kulit, dan bawah kuku</li>
+                  <li>Napas dan denyut jantung cepat</li>
+                  <li>Pusing saat berdiri</li>
+                  <li>Mudah memar</li>
+                </ul>
+              </section>
+            </div>
+            <div class="impact-grid reveal">
+              <div class="impact"><svg class="icon" aria-hidden="true"><use href="#i-baby"/></svg><p><strong>Anak</strong> perkembangan kognitif dan motorik dapat terganggu.</p></div>
+              <div class="impact"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg><p><strong>Pelajar</strong> konsentrasi dan prestasi belajar dapat menurun.</p></div>
+              <div class="impact"><svg class="icon" aria-hidden="true"><use href="#i-battery"/></svg><p><strong>Dewasa</strong> produktivitas kerja dan kualitas hidup berkurang.</p></div>
+              <div class="impact"><svg class="icon" aria-hidden="true"><use href="#i-baby-bump"/></svg><p><strong>Ibu hamil</strong> risiko kelahiran prematur, berat lahir rendah, dan kematian ibu meningkat.</p></div>
+            </div>
+          </article>
+
+          <article class="info-section" id="info-pencegahan" tabindex="-1">
+            <h2 class="info-title reveal"><span class="info-num">07</span>Pencegahan</h2>
+            <div class="card-grid cols-2" data-stagger>
+              <section class="food-card card-spot">
+                <h3><svg class="icon" aria-hidden="true"><use href="#i-utensils"/></svg>Sumber zat besi</h3>
+                <p>Hewani (lebih mudah diserap): hati, daging merah, ikan, ayam, telur. Nabati: kacang-kacangan, tempe, tahu, serta sayuran hijau tua seperti bayam dan daun kelor.</p>
+              </section>
+              <section class="food-card card-spot">
+                <h3><svg class="icon" aria-hidden="true"><use href="#i-citrus"/></svg>Pendamping penyerapan</h3>
+                <p>Buah dan sayur kaya vitamin C, misalnya jeruk, jambu biji, pepaya, dan tomat, membantu penyerapan zat besi.</p>
+              </section>
+              <section class="food-card card-spot">
+                <h3><svg class="icon" aria-hidden="true"><use href="#i-coffee"/></svg>Penghambat penyerapan</h3>
+                <p>Teh, kopi, kakao, dan kalsium dapat menghambat penyerapan zat besi. Hindari mengonsumsinya bersamaan dengan makanan sumber zat besi atau TTD.</p>
+              </section>
+              <section class="food-card card-spot">
+                <h3><svg class="icon" aria-hidden="true"><use href="#i-sparkle"/></svg>Kebersihan</h3>
+                <p>Cuci tangan pakai sabun dan jaga kebersihan lingkungan untuk mencegah infeksi seperti kecacingan.</p>
+              </section>
+            </div>
+            <div class="ttd-panel reveal">
+              <div class="ttd-head">
+                <span class="info-icon"><svg class="icon" aria-hidden="true"><use href="#i-pill"/></svg></span>
+                <div>
+                  <h3>Tablet Tambah Darah (TTD) dan MMS</h3>
+                  <p>TTD berisi zat besi dan asam folat. Untuk ibu hamil, Kemenkes juga memberikan MMS (suplemen multimikronutrien) yang berisi zat besi, asam folat, dan vitamin serta mineral lain.</p>
+                </div>
+              </div>
+              <div class="ttd-grid">
+                <div class="ttd-item"><strong>Remaja putri</strong><span>1 tablet TTD setiap minggu</span></div>
+                <div class="ttd-item"><strong>Wanita usia subur</strong><span>1 tablet TTD setiap minggu</span></div>
+                <div class="ttd-item"><strong>Ibu hamil</strong><span>1 tablet TTD atau MMS setiap hari sesuai anjuran; program MMS memberikan 180 tablet untuk 6 bulan kehamilan</span></div>
+              </div>
+              <p class="ttd-tip"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>Minum TTD dengan air putih atau bersama buah, bukan dengan teh, kopi, atau susu. Mual ringan dan tinja berwarna gelap dapat terjadi; konsultasikan bila keluhan mengganggu.</p>
+            </div>
+          </article>
+
+          <article class="info-section" id="info-penanganan" tabindex="-1">
+            <h2 class="info-title reveal"><span class="info-num">08</span>Penanganan umum dan kapan memeriksakan diri</h2>
+            <p class="reveal">Penanganan anemia bergantung pada penyebabnya dan ditentukan oleh tenaga kesehatan. Langkah yang umum dilakukan antara lain perbaikan pola makan, pemberian suplemen sesuai resep, serta pengobatan penyebab seperti infeksi atau perdarahan. Anemia berat dapat memerlukan perawatan di rumah sakit.</p>
+            <div class="card-grid cols-2" data-stagger>
+              <section class="when-card card-spot">
+                <h3><svg class="icon" aria-hidden="true"><use href="#i-stethoscope"/></svg>Periksakan diri bila</h3>
+                <ul class="dot-list">
+                  <li>Gejala seperti lemas, pucat, atau pusing tidak membaik</li>
+                  <li>Menstruasi sangat banyak atau lebih dari 7 hari</li>
+                  <li>Sedang hamil: lakukan pemeriksaan kehamilan minimal 6 kali, termasuk cek Hb</li>
+                  <li>Ada anggota keluarga dengan kelainan darah bawaan</li>
+                  <li>Hasil skrining di sekolah atau Posyandu menunjukkan Hb rendah</li>
+                </ul>
+              </section>
+              <section class="when-card when-card-danger card-spot">
+                <h3><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>Segera ke IGD bila ada tanda bahaya</h3>
+                <ul class="dot-list">
+                  <li>Pingsan atau hampir pingsan</li>
+                  <li>Nyeri dada</li>
+                  <li>Sesak napas berat, terutama saat istirahat</li>
+                  <li>Perdarahan berat, termasuk perdarahan saat hamil</li>
+                </ul>
+                <p class="emergency"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>Layanan gawat darurat: <a href="tel:119">119</a></p>
+              </section>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== DATA ============================== -->
+    <section class="page" id="page-data" data-page="data" data-title="Data Anemia" aria-labelledby="data-title">
+      <header class="page-hero">
+        <div class="container">
+          <p class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span>Statistik terverifikasi</p>
+          <h1 class="page-title" id="data-title" tabindex="-1">Data Anemia</h1>
+          <p class="page-lead">Grafik berikut memakai estimasi WHO dan hasil survei nasional Kementerian Kesehatan. Setiap angka disertai tahun data dan tautan sumbernya.</p>
+        </div>
+      </header>
+
+      <div class="container data-layout">
+        <div class="data-highlights" data-stagger>
+          <article class="highlight-card card-spot">
+            <p class="highlight-value"><span class="count" data-count="26.7" data-decimals="1">26,7</span>%</p>
+            <p class="highlight-label">perempuan 15–49 tahun di Indonesia mengalami anemia (estimasi WHO, data 2023)</p>
+          </article>
+          <article class="highlight-card card-spot">
+            <p class="highlight-value"><span class="count" data-count="38.4" data-decimals="1">38,4</span>%</p>
+            <p class="highlight-label">anak usia 6–59 bulan di Indonesia mengalami anemia (estimasi WHO, data 2019)</p>
+          </article>
+          <article class="highlight-card card-spot">
+            <p class="highlight-value"><span class="count" data-count="27.7" data-decimals="1">27,7</span>%</p>
+            <p class="highlight-label">ibu hamil di Indonesia mengalami anemia (SKI 2023, Kemenkes)</p>
+          </article>
+        </div>
+
+        <figure class="chart-card reveal">
+          <figcaption class="chart-head">
+            <h2 class="chart-title">Indonesia dan global per kelompok populasi</h2>
+            <p class="chart-sub">Persentase yang mengalami anemia. Estimasi WHO; tahun data tertera di setiap kelompok.</p>
+          </figcaption>
+          <div class="chart-legend">
+            <span class="legend-item"><span class="swatch swatch-idn" aria-hidden="true"></span>Indonesia</span>
+            <span class="legend-item"><span class="swatch swatch-glb" aria-hidden="true"></span>Global</span>
+          </div>
+          <div class="chart" id="chart-comparison"><p class="chart-fallback">Grafik memerlukan JavaScript.</p></div>
+          <p class="chart-source">Sumber: <a href="https://www.who.int/data/gho/data/themes/topics/anaemia_in_women_and_children" target="_blank" rel="noopener noreferrer">WHO Global Health Observatory, Anaemia in women and children</a>. Data perempuan 15–49 tahun hingga 2023; data anak hingga 2019. Diakses 23 November 2026.</p>
+        </figure>
+
+        <figure class="chart-card reveal">
+          <figcaption class="chart-head">
+            <h2 class="chart-title">Tren anemia perempuan 15–49 tahun, 2000–2023</h2>
+            <p class="chart-sub">Garis menunjukkan estimasi WHO; area berwarna menunjukkan rentang ketidakpastian 95%. Arahkan kursor atau gunakan tombol panah untuk melihat setiap tahun.</p>
+          </figcaption>
+          <div class="chart-legend">
+            <span class="legend-item"><span class="swatch swatch-idn swatch-line" aria-hidden="true"></span>Indonesia</span>
+            <span class="legend-item"><span class="swatch swatch-glb swatch-line swatch-dashed" aria-hidden="true"></span>Global</span>
+            <span class="legend-item"><span class="swatch swatch-band" aria-hidden="true"></span>Rentang ketidakpastian</span>
+          </div>
+          <div class="chart chart-trend" id="chart-trend"><p class="chart-fallback">Grafik memerlukan JavaScript.</p></div>
+          <p class="chart-source">Sumber: <a href="https://www.who.int/data/gho/data/themes/topics/anaemia_in_women_and_children" target="_blank" rel="noopener noreferrer">WHO Global Health Observatory</a>, indikator prevalensi anemia pada perempuan usia reproduksi (15–49 tahun).</p>
+        </figure>
+
+        <div class="data-split">
+          <figure class="chart-card reveal">
+            <figcaption class="chart-head">
+              <h2 class="chart-title">Anemia pada ibu hamil di Indonesia</h2>
+              <p class="chart-sub">Hasil survei nasional Kementerian Kesehatan.</p>
+            </figcaption>
+            <div class="chart" id="chart-pregnant"><p class="chart-fallback">Grafik memerlukan JavaScript.</p></div>
+            <p class="chart-note">Turun 21,2 poin persentase dari Riskesdas 2018 ke SKI 2023. Prevalensi tertinggi pada SKI 2023 ditemukan pada ibu hamil usia 35–44 tahun. Kedua survei memakai metode yang tidak sepenuhnya sama, jadi perbandingan perlu dibaca hati-hati.</p>
+            <p class="chart-source">Sumber: <a href="https://www.badankebijakan.kemkes.go.id/hasil-utama-ski-2023/" target="_blank" rel="noopener noreferrer">BKPK Kemenkes RI, FAQ Hasil Utama SKI 2023</a>.</p>
+          </figure>
+
+          <figure class="chart-card reveal">
+            <figcaption class="chart-head">
+              <h2 class="chart-title">Tablet Tambah Darah pada remaja putri</h2>
+              <p class="chart-sub">Survei Kesehatan Indonesia (SKI) 2023.</p>
+            </figcaption>
+            <div class="ttd-stats">
+              <div class="ttd-stat">
+                <p class="ttd-stat-value"><span class="count" data-count="54.8" data-decimals="1">54,8</span>%</p>
+                <p>remaja putri belum pernah mendapatkan TTD</p>
+                <span class="mini-meter" aria-hidden="true"><span class="mini-meter-fill meter-548"></span></span>
+              </div>
+              <div class="ttd-stat">
+                <p class="ttd-stat-value"><span class="count" data-count="51.4" data-decimals="1">51,4</span>%</p>
+                <p>remaja putri tidak mengonsumsi TTD karena tidak mengetahui manfaatnya</p>
+                <span class="mini-meter" aria-hidden="true"><span class="mini-meter-fill meter-514"></span></span>
+              </div>
+            </div>
+            <p class="chart-note">Akses TTD masih sangat bergantung pada sekolah (88,9–90,3%), sehingga remaja putri di luar sekolah berisiko tidak terjangkau program.</p>
+            <p class="chart-source">Sumber: <a href="https://www.badankebijakan.kemkes.go.id/anemia-pada-remaja-putri-tantangan-pencegahan-melalui-konsumsi-tablet-tambah-darah/" target="_blank" rel="noopener noreferrer">BKPK Kemenkes RI, Anemia pada Remaja Putri</a>, berdasarkan SKI 2023.</p>
+          </figure>
+        </div>
+
+        <figure class="chart-card reveal">
+          <figcaption class="chart-head">
+            <h2 class="chart-title">Seberapa besar masalahnya menurut klasifikasi WHO?</h2>
+            <p class="chart-sub">WHO mengelompokkan besarnya masalah kesehatan masyarakat berdasarkan prevalensi anemia. Penanda menunjukkan prevalensi perempuan 15–49 tahun tahun 2023.</p>
+          </figcaption>
+          <div class="ph-scale" id="ph-scale">
+            <div class="ph-track" aria-hidden="true">
+              <span class="ph-seg ph-normal"></span>
+              <span class="ph-seg ph-mild"></span>
+              <span class="ph-seg ph-moderate"></span>
+              <span class="ph-seg ph-severe"></span>
+              <span class="ph-marker ph-marker-idn"><span>Indonesia 26,7%</span></span>
+              <span class="ph-marker ph-marker-glb"><span>Global 30,7%</span></span>
+            </div>
+            <ul class="ph-labels">
+              <li><strong>Normal</strong> 4,9% atau kurang</li>
+              <li><strong>Ringan</strong> 5,0–19,9%</li>
+              <li><strong>Sedang</strong> 20,0–39,9%</li>
+              <li><strong>Berat</strong> 40% atau lebih</li>
+            </ul>
+            <p class="ph-summary">Dengan prevalensi 26,7%, anemia pada perempuan usia subur di Indonesia termasuk <strong>masalah kesehatan masyarakat tingkat sedang</strong>.</p>
+          </div>
+          <p class="chart-source">Sumber klasifikasi: <a href="https://www.who.int/publications/i/item/9789240088542" target="_blank" rel="noopener noreferrer">WHO, Guideline on haemoglobin cutoffs (2024)</a>. Sumber prevalensi: WHO GHO.</p>
+        </figure>
+
+        <section class="sources-card reveal">
+          <h2 class="chart-title">Sumber data dan catatan metodologi</h2>
+          <ul class="source-list">
+            <li><a href="https://www.who.int/publications/i/item/9789240088542" target="_blank" rel="noopener noreferrer">WHO (2024). Guideline on haemoglobin cutoffs to define anaemia in individuals and populations.</a> Terbit 5 Maret 2024.</li>
+            <li><a href="https://www.who.int/data/gho/data/themes/topics/anaemia_in_women_and_children" target="_blank" rel="noopener noreferrer">WHO Global Health Observatory: Anaemia in women and children.</a> Estimasi model WHO, diakses 23 November 2026.</li>
+            <li><a href="https://www.who.int/news-room/fact-sheets/detail/anaemia" target="_blank" rel="noopener noreferrer">WHO Fact sheet: Anaemia.</a> Diakses 23 November 2026.</li>
+            <li><a href="https://www.badankebijakan.kemkes.go.id/hasil-utama-ski-2023/" target="_blank" rel="noopener noreferrer">BKPK Kemenkes RI. FAQ Hasil Utama Survei Kesehatan Indonesia (SKI) 2023.</a></li>
+            <li><a href="https://www.badankebijakan.kemkes.go.id/anemia-pada-remaja-putri-tantangan-pencegahan-melalui-konsumsi-tablet-tambah-darah/" target="_blank" rel="noopener noreferrer">BKPK Kemenkes RI. Anemia pada Remaja Putri: Tantangan Pencegahan melalui Konsumsi Tablet Tambah Darah.</a></li>
+            <li><a href="https://www.kemkes.go.id/id/menkes-tekankan-pentingnya-ragam-mikronutrien-bagi-ibu-hamil" target="_blank" rel="noopener noreferrer">Kemenkes RI (2024). Menkes Tekankan Pentingnya Ragam Mikronutrien bagi Ibu Hamil.</a> Rilis 18 Oktober 2024.</li>
+          </ul>
+          <p class="chart-note">Estimasi WHO berasal dari pemodelan data survei berbagai negara sehingga dapat berbeda dari hasil survei nasional seperti Riskesdas dan SKI. Rentang ketidakpastian estimasi Indonesia cukup lebar, sehingga angka sebaiknya dibaca sebagai perkiraan.</p>
+        </section>
+      </div>
+    </section>
+
+    <!-- ============================== SIMULASI ============================== -->
+    <section class="page" id="page-simulasi" data-page="simulasi" data-title="Simulasi Skrining" aria-labelledby="simulasi-title">
+      <header class="page-hero page-hero-compact">
+        <div class="container">
+          <p class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span>6 langkah · sekitar 3 menit</p>
+          <h1 class="page-title" id="simulasi-title" tabindex="-1">Simulasi Skrining Anemia</h1>
+          <p class="page-lead">Jawab pertanyaan berikut dengan jujur. Status anemia hanya ditentukan dari kadar Hb memakai ambang WHO 2024. Jawaban lain dipakai sebagai ringkasan indikator risiko.</p>
+        </div>
+      </header>
+
+      <div class="container quiz-layout">
+        <aside class="quiz-aside" aria-label="Tentang simulasi">
+          <ol class="quiz-steps" id="quiz-steps">
+            <li data-step="identitas"><span class="qs-dot">1</span><span>Identitas</span></li>
+            <li data-step="hb"><span class="qs-dot">2</span><span>Kadar Hb</span></li>
+            <li data-step="menstruasi"><span class="qs-dot">3</span><span>Menstruasi</span></li>
+            <li data-step="makan"><span class="qs-dot">4</span><span>Kebiasaan makan</span></li>
+            <li data-step="ttd"><span class="qs-dot">5</span><span>Tablet Tambah Darah</span></li>
+            <li data-step="gejala"><span class="qs-dot">6</span><span>Gejala</span></li>
+          </ol>
+          <div class="aside-note">
+            <svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>
+            <p><strong>Privasi terjaga.</strong> Jawaban hanya diproses di perangkat Anda, tidak dikirim ke server, dan tidak disimpan di browser.</p>
+          </div>
+          <div class="aside-note aside-note-warn">
+            <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+            <p><strong>Bukan diagnosis.</strong> Hasil simulasi tidak menggantikan pemeriksaan dan konsultasi dengan tenaga kesehatan.</p>
+          </div>
+        </aside>
+
+        <div class="quiz-card">
+          <div class="quiz-progress">
+            <div class="quiz-progress-head">
+              <p class="quiz-step-label" id="quiz-step-label">Langkah 1 dari 6</p>
+              <p class="quiz-step-percent" id="quiz-percent">0%</p>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span class="progress-fill" id="quiz-progress-fill"></span></div>
+          </div>
+
+          <form id="quiz-form" class="quiz-form" novalidate autocomplete="off">
+            <fieldset class="quiz-step is-active" id="step-identitas" data-step="identitas">
+              <legend class="step-legend"><h2 class="step-title" tabindex="-1">Identitas</h2></legend>
+              <p class="step-desc">Data ini menentukan kelompok acuan kadar Hb menurut WHO 2024.</p>
+
+              <div class="field">
+                <label class="field-label" for="f-name">Nama atau alias <span class="optional">opsional</span></label>
+                <input class="input" type="text" id="f-name" name="name" maxlength="40" placeholder="Misalnya Sari" aria-describedby="help-name">
+                <p class="field-help" id="help-name">Boleh nama samaran. Nama hanya ditampilkan di laporan Anda.</p>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label class="field-label" for="f-age">Umur (tahun)</label>
+                  <input class="input" type="number" id="f-age" name="ageYears" inputmode="numeric" min="0" max="120" step="1" required aria-describedby="err-age">
+                  <p class="field-error" id="err-age" hidden></p>
+                </div>
+                <div class="field" id="field-age-months" hidden>
+                  <label class="field-label" for="f-age-months">Usia anak dalam bulan</label>
+                  <input class="input" type="number" id="f-age-months" name="ageMonths" inputmode="numeric" min="0" max="59" step="1" aria-describedby="help-age-months err-age-months">
+                  <p class="field-help" id="help-age-months">Contoh: 2 tahun 3 bulan = 27 bulan.</p>
+                  <p class="field-error" id="err-age-months" hidden></p>
+                </div>
+              </div>
+
+              <fieldset class="field choice-group" id="group-sex">
+                <legend class="field-label">Jenis kelamin <span class="optional">untuk acuan Hb</span></legend>
+                <div class="choice-grid cols-2">
+                  <label class="choice"><input type="radio" name="sex" value="female" required aria-describedby="err-sex"><span class="choice-body"><span class="choice-title">Perempuan</span></span></label>
+                  <label class="choice"><input type="radio" name="sex" value="male" aria-describedby="err-sex"><span class="choice-body"><span class="choice-title">Laki-laki</span></span></label>
+                </div>
+                <p class="field-error" id="err-sex" hidden></p>
+              </fieldset>
+
+              <fieldset class="field choice-group" id="field-pregnant" hidden>
+                <legend class="field-label">Status kehamilan</legend>
+                <div class="choice-grid cols-2">
+                  <label class="choice"><input type="radio" name="pregnant" value="no" aria-describedby="err-pregnant"><span class="choice-body"><span class="choice-title">Tidak hamil</span></span></label>
+                  <label class="choice"><input type="radio" name="pregnant" value="yes" aria-describedby="err-pregnant"><span class="choice-body"><span class="choice-title">Sedang hamil</span></span></label>
+                </div>
+                <p class="field-error" id="err-pregnant" hidden></p>
+              </fieldset>
+
+              <fieldset class="field choice-group" id="field-trimester" hidden>
+                <legend class="field-label">Trimester kehamilan</legend>
+                <div class="choice-grid cols-3">
+                  <label class="choice"><input type="radio" name="trimester" value="1" aria-describedby="help-trimester err-trimester"><span class="choice-body"><span class="choice-title">Trimester 1</span><span class="choice-desc">0–12 minggu</span></span></label>
+                  <label class="choice"><input type="radio" name="trimester" value="2" aria-describedby="help-trimester err-trimester"><span class="choice-body"><span class="choice-title">Trimester 2</span><span class="choice-desc">Di atas 12 hingga 24 minggu</span></span></label>
+                  <label class="choice"><input type="radio" name="trimester" value="3" aria-describedby="help-trimester err-trimester"><span class="choice-body"><span class="choice-title">Trimester 3</span><span class="choice-desc">Di atas 24 minggu hingga persalinan</span></span></label>
+                </div>
+                <p class="field-help" id="help-trimester">Pembagian minggu mengikuti standar pelayanan antenatal Kemenkes. Tanyakan pada bidan atau dokter bila ragu.</p>
+                <p class="field-error" id="err-trimester" hidden></p>
+              </fieldset>
+            </fieldset>
+
+            <fieldset class="quiz-step" id="step-hb" data-step="hb">
+              <legend class="step-legend"><h2 class="step-title" tabindex="-1">Kadar hemoglobin (Hb)</h2></legend>
+              <p class="step-desc">Kadar Hb tercantum pada hasil pemeriksaan darah, biasanya dalam satuan g/dL.</p>
+
+              <fieldset class="field choice-group" id="group-hb-known">
+                <legend class="field-label">Apakah Anda mengetahui kadar Hb Anda?</legend>
+                <div class="choice-grid cols-2">
+                  <label class="choice"><input type="radio" name="hbKnown" value="yes" aria-describedby="err-hb-known"><span class="choice-body"><span class="choice-title">Ya, saya tahu</span><span class="choice-desc">Dari hasil pemeriksaan darah</span></span></label>
+                  <label class="choice"><input type="radio" name="hbKnown" value="no" aria-describedby="err-hb-known"><span class="choice-body"><span class="choice-title">Belum tahu</span><span class="choice-desc">Belum pernah atau lupa hasilnya</span></span></label>
+                </div>
+                <p class="field-error" id="err-hb-known" hidden></p>
+              </fieldset>
+
+              <div class="hb-known-fields" id="hb-known-fields" hidden>
+                <div class="field">
+                  <label class="field-label" for="f-hb">Kadar Hb</label>
+                  <div class="input-suffix">
+                    <input class="input" type="text" id="f-hb" name="hbValue" inputmode="decimal" placeholder="Misalnya 11,5" aria-describedby="help-hb err-hb">
+                    <span class="suffix" aria-hidden="true">g/dL</span>
+                  </div>
+                  <p class="field-help" id="help-hb">Gunakan koma atau titik untuk desimal. Rentang yang diterima 3–25 g/dL.</p>
+                  <p class="field-error" id="err-hb" hidden></p>
+                </div>
+
+                <fieldset class="field choice-group">
+                  <legend class="field-label">Kapan Hb diperiksa? <span class="optional">opsional</span></legend>
+                  <div class="choice-grid cols-3">
+                    <label class="choice"><input type="radio" name="hbTestedWhen" value="recent"><span class="choice-body"><span class="choice-title">Kurang dari 1 bulan</span></span></label>
+                    <label class="choice"><input type="radio" name="hbTestedWhen" value="mid"><span class="choice-body"><span class="choice-title">1–6 bulan lalu</span></span></label>
+                    <label class="choice"><input type="radio" name="hbTestedWhen" value="old"><span class="choice-body"><span class="choice-title">Lebih dari 6 bulan</span></span></label>
+                  </div>
+                </fieldset>
+
+                <details class="advanced">
+                  <summary><svg class="icon" aria-hidden="true"><use href="#i-gauge"/></svg>Penyesuaian WHO 2024 <span class="optional">opsional</span></summary>
+                  <p class="field-help">WHO 2024 menganjurkan kadar Hb disesuaikan untuk orang yang tinggal di dataran tinggi dan untuk perokok. Biarkan pilihan bawaan bila tidak yakin.</p>
+                  <div class="field-row">
+                    <div class="field">
+                      <label class="field-label" for="f-elevation">Ketinggian tempat tinggal</label>
+                      <select class="input" id="f-elevation" name="elevation">
+                        <option value="0" selected>Di bawah 500 mdpl atau tidak tahu</option>
+                        <option value="500">500–999 mdpl</option>
+                        <option value="1000">1.000–1.499 mdpl</option>
+                        <option value="1500">1.500–1.999 mdpl</option>
+                        <option value="2000">2.000–2.499 mdpl</option>
+                        <option value="2500">2.500–2.999 mdpl</option>
+                        <option value="3000">3.000–3.499 mdpl</option>
+                        <option value="3500">3.500–3.999 mdpl</option>
+                        <option value="4000">4.000–4.499 mdpl</option>
+                        <option value="4500">4.500–4.999 mdpl</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label class="field-label" for="f-smoking">Kebiasaan merokok</label>
+                      <select class="input" id="f-smoking" name="smoking">
+                        <option value="no" selected>Tidak merokok</option>
+                        <option value="unknown">Merokok, jumlah tidak tentu</option>
+                        <option value="lt10">Kurang dari 10 batang per hari</option>
+                        <option value="10to19">10–19 batang per hari</option>
+                        <option value="gte20">20 batang per hari atau lebih</option>
+                      </select>
+                    </div>
+                  </div>
+                </details>
+              </div>
+
+              <div class="callout callout-info" id="hb-unknown-note" hidden>
+                <svg class="icon" aria-hidden="true"><use href="#i-flask"/></svg>
+                <p>Tidak apa-apa. Hasil akan menampilkan ringkasan indikator risiko <strong>tanpa menentukan status anemia</strong>. Untuk mengetahui kadar Hb, periksakan darah di Puskesmas, klinik, atau laboratorium.</p>
+              </div>
+            </fieldset>
+
+            <fieldset class="quiz-step" id="step-menstruasi" data-step="menstruasi">
+              <legend class="step-legend"><h2 class="step-title" tabindex="-1">Menstruasi</h2></legend>
+              <p class="step-desc">Kehilangan darah saat menstruasi berpengaruh pada cadangan zat besi.</p>
+
+              <fieldset class="field choice-group">
+                <legend class="field-label">Status menstruasi saat ini</legend>
+                <div class="choice-grid cols-3">
+                  <label class="choice"><input type="radio" name="menstruationStatus" value="active" aria-describedby="err-mens-status"><span class="choice-body"><span class="choice-title">Mengalami menstruasi</span></span></label>
+                  <label class="choice"><input type="radio" name="menstruationStatus" value="not-yet" aria-describedby="err-mens-status"><span class="choice-body"><span class="choice-title">Belum pernah menstruasi</span></span></label>
+                  <label class="choice"><input type="radio" name="menstruationStatus" value="stopped" aria-describedby="err-mens-status"><span class="choice-body"><span class="choice-title">Sudah tidak menstruasi</span><span class="choice-desc">Misalnya menopause</span></span></label>
+                </div>
+                <p class="field-error" id="err-mens-status" hidden></p>
+              </fieldset>
+
+              <div id="mens-active-fields" hidden>
+                <fieldset class="field choice-group">
+                  <legend class="field-label">Keteraturan siklus</legend>
+                  <div class="choice-grid cols-3">
+                    <label class="choice"><input type="radio" name="regularity" value="regular" aria-describedby="help-regularity err-regularity"><span class="choice-body"><span class="choice-title">Teratur</span></span></label>
+                    <label class="choice"><input type="radio" name="regularity" value="irregular" aria-describedby="help-regularity err-regularity"><span class="choice-body"><span class="choice-title">Tidak teratur</span></span></label>
+                    <label class="choice"><input type="radio" name="regularity" value="unknown" aria-describedby="help-regularity err-regularity"><span class="choice-body"><span class="choice-title">Tidak tahu</span></span></label>
+                  </div>
+                  <p class="field-help" id="help-regularity">Siklus teratur bila jarak antarmenstruasi relatif sama setiap bulan, umumnya 21–35 hari.</p>
+                  <p class="field-error" id="err-regularity" hidden></p>
+                </fieldset>
+
+                <fieldset class="field choice-group">
+                  <legend class="field-label">Lama menstruasi</legend>
+                  <div class="choice-grid cols-3">
+                    <label class="choice"><input type="radio" name="duration" value="lt3" aria-describedby="err-duration"><span class="choice-body"><span class="choice-title">Kurang dari 3 hari</span></span></label>
+                    <label class="choice"><input type="radio" name="duration" value="3to7" aria-describedby="err-duration"><span class="choice-body"><span class="choice-title">3–7 hari</span></span></label>
+                    <label class="choice"><input type="radio" name="duration" value="gt7" aria-describedby="err-duration"><span class="choice-body"><span class="choice-title">Lebih dari 7 hari</span></span></label>
+                  </div>
+                  <p class="field-error" id="err-duration" hidden></p>
+                </fieldset>
+
+                <fieldset class="field choice-group">
+                  <legend class="field-label">Jumlah darah menstruasi</legend>
+                  <div class="choice-grid cols-3">
+                    <label class="choice"><input type="radio" name="volume" value="normal" aria-describedby="err-volume"><span class="choice-body"><span class="choice-title">Normal</span><span class="choice-desc">Ganti pembalut beberapa kali sehari seperti biasa</span></span></label>
+                    <label class="choice"><input type="radio" name="volume" value="heavy" aria-describedby="err-volume"><span class="choice-body"><span class="choice-title">Banyak</span><span class="choice-desc">Ganti pembalut tiap 1–2 jam atau ada gumpalan besar</span></span></label>
+                    <label class="choice"><input type="radio" name="volume" value="unknown" aria-describedby="err-volume"><span class="choice-body"><span class="choice-title">Tidak tahu</span></span></label>
+                  </div>
+                  <p class="field-error" id="err-volume" hidden></p>
+                </fieldset>
+              </div>
+            </fieldset>
+
+            <fieldset class="quiz-step" id="step-makan" data-step="makan">
+              <legend class="step-legend"><h2 class="step-title" tabindex="-1">Kebiasaan makan</h2></legend>
+              <p class="step-desc">Pikirkan kebiasaan Anda dalam sebulan terakhir.</p>
+
+              <fieldset class="field choice-group">
+                <legend class="field-label">Seberapa sering makan makanan sumber zat besi?</legend>
+                <p class="field-help" id="help-iron">Contoh: hati, daging merah, ikan, ayam, telur, kacang-kacangan, tempe, tahu, dan sayuran hijau tua.</p>
+                <div class="choice-grid cols-2">
+                  <label class="choice"><input type="radio" name="ironFreq" value="daily" aria-describedby="help-iron err-iron"><span class="choice-body"><span class="choice-title">Setiap hari</span></span></label>
+                  <label class="choice"><input type="radio" name="ironFreq" value="often" aria-describedby="help-iron err-iron"><span class="choice-body"><span class="choice-title">3–6 kali per minggu</span></span></label>
+                  <label class="choice"><input type="radio" name="ironFreq" value="sometimes" aria-describedby="help-iron err-iron"><span class="choice-body"><span class="choice-title">1–2 kali per minggu</span></span></label>
+                  <label class="choice"><input type="radio" name="ironFreq" value="rarely" aria-describedby="help-iron err-iron"><span class="choice-body"><span class="choice-title">Jarang atau hampir tidak pernah</span></span></label>
+                </div>
+                <p class="field-error" id="err-iron" hidden></p>
+              </fieldset>
+
+              <fieldset class="field choice-group">
+                <legend class="field-label">Berapa kali makan utama dalam sehari?</legend>
+                <div class="choice-grid cols-3">
+                  <label class="choice"><input type="radio" name="meals" value="3plus" aria-describedby="err-meals"><span class="choice-body"><span class="choice-title">3 kali atau lebih</span></span></label>
+                  <label class="choice"><input type="radio" name="meals" value="2" aria-describedby="err-meals"><span class="choice-body"><span class="choice-title">2 kali</span></span></label>
+                  <label class="choice"><input type="radio" name="meals" value="1" aria-describedby="err-meals"><span class="choice-body"><span class="choice-title">1 kali atau kurang</span></span></label>
+                </div>
+                <p class="field-error" id="err-meals" hidden></p>
+              </fieldset>
+
+              <fieldset class="field choice-group">
+                <legend class="field-label">Kebiasaan sarapan</legend>
+                <div class="choice-grid cols-3">
+                  <label class="choice"><input type="radio" name="breakfast" value="daily" aria-describedby="err-breakfast"><span class="choice-body"><span class="choice-title">Setiap hari</span></span></label>
+                  <label class="choice"><input type="radio" name="breakfast" value="sometimes" aria-describedby="err-breakfast"><span class="choice-body"><span class="choice-title">Kadang-kadang</span></span></label>
+                  <label class="choice"><input type="radio" name="breakfast" value="rarely" aria-describedby="err-breakfast"><span class="choice-body"><span class="choice-title">Jarang atau tidak pernah</span></span></label>
+                </div>
+                <p class="field-error" id="err-breakfast" hidden></p>
+              </fieldset>
+
+              <fieldset class="field choice-group">
+                <legend class="field-label">Seberapa sering minum teh atau kopi bersamaan dengan makan?</legend>
+                <div class="choice-grid cols-3">
+                  <label class="choice"><input type="radio" name="teaCoffee" value="never" aria-describedby="err-tea"><span class="choice-body"><span class="choice-title">Tidak pernah atau jarang</span></span></label>
+                  <label class="choice"><input type="radio" name="teaCoffee" value="sometimes" aria-describedby="err-tea"><span class="choice-body"><span class="choice-title">Kadang-kadang</span></span></label>
+                  <label class="choice"><input type="radio" name="teaCoffee" value="often" aria-describedby="err-tea"><span class="choice-body"><span class="choice-title">Sering</span></span></label>
+                </div>
+                <p class="field-error" id="err-tea" hidden></p>
+              </fieldset>
+            </fieldset>
+
+            <fieldset class="quiz-step" id="step-ttd" data-step="ttd">
+              <legend class="step-legend"><h2 class="step-title" tabindex="-1">Tablet Tambah Darah (TTD)</h2></legend>
+              <p class="step-desc" id="ttd-context">TTD berisi zat besi dan asam folat untuk mencegah anemia.</p>
+
+              <fieldset class="field choice-group">
+                <legend class="field-label">Apakah Anda mengonsumsi TTD<span id="ttd-mms-hint"> (atau MMS bagi ibu hamil)</span>?</legend>
+                <div class="choice-grid cols-3">
+                  <label class="choice"><input type="radio" name="ttdUse" value="yes" aria-describedby="err-ttd-use"><span class="choice-body"><span class="choice-title">Ya</span></span></label>
+                  <label class="choice"><input type="radio" name="ttdUse" value="no" aria-describedby="err-ttd-use"><span class="choice-body"><span class="choice-title">Tidak</span></span></label>
+                  <label class="choice"><input type="radio" name="ttdUse" value="na" aria-describedby="err-ttd-use"><span class="choice-body"><span class="choice-title">Tidak berlaku</span><span class="choice-desc">Bukan sasaran atau tidak dianjurkan</span></span></label>
+                </div>
+                <p class="field-error" id="err-ttd-use" hidden></p>
+              </fieldset>
+
+              <div id="ttd-yes-fields" hidden>
+                <fieldset class="field choice-group">
+                  <legend class="field-label">Frekuensi minum</legend>
+                  <div class="choice-grid cols-3">
+                    <label class="choice"><input type="radio" name="ttdFrequency" value="daily" aria-describedby="err-ttd-freq"><span class="choice-body"><span class="choice-title">Setiap hari</span></span></label>
+                    <label class="choice"><input type="radio" name="ttdFrequency" value="weekly" aria-describedby="err-ttd-freq"><span class="choice-body"><span class="choice-title">1 kali seminggu</span></span></label>
+                    <label class="choice"><input type="radio" name="ttdFrequency" value="irregular" aria-describedby="err-ttd-freq"><span class="choice-body"><span class="choice-title">Tidak menentu</span></span></label>
+                  </div>
+                  <p class="field-error" id="err-ttd-freq" hidden></p>
+                </fieldset>
+
+                <fieldset class="field choice-group">
+                  <legend class="field-label">Kepatuhan</legend>
+                  <div class="choice-grid cols-3">
+                    <label class="choice"><input type="radio" name="ttdAdherence" value="always" aria-describedby="err-ttd-adh"><span class="choice-body"><span class="choice-title">Selalu sesuai anjuran</span></span></label>
+                    <label class="choice"><input type="radio" name="ttdAdherence" value="sometimes" aria-describedby="err-ttd-adh"><span class="choice-body"><span class="choice-title">Kadang terlewat</span></span></label>
+                    <label class="choice"><input type="radio" name="ttdAdherence" value="often-missed" aria-describedby="err-ttd-adh"><span class="choice-body"><span class="choice-title">Sering terlewat</span></span></label>
+                  </div>
+                  <p class="field-error" id="err-ttd-adh" hidden></p>
+                </fieldset>
+              </div>
+            </fieldset>
+
+            <fieldset class="quiz-step" id="step-gejala" data-step="gejala">
+              <legend class="step-legend"><h2 class="step-title" tabindex="-1">Gejala</h2></legend>
+              <p class="step-desc">Pilih semua yang Anda alami dalam 2 minggu terakhir.</p>
+
+              <fieldset class="field choice-group">
+                <legend class="field-label">Gejala yang dialami</legend>
+                <div class="chip-grid">
+                  <label class="chip"><input type="checkbox" name="symptoms" value="lemas" aria-describedby="err-symptoms"><span>Lemas</span></label>
+                  <label class="chip"><input type="checkbox" name="symptoms" value="pusing" aria-describedby="err-symptoms"><span>Pusing</span></label>
+                  <label class="chip"><input type="checkbox" name="symptoms" value="pucat" aria-describedby="err-symptoms"><span>Pucat</span></label>
+                  <label class="chip"><input type="checkbox" name="symptoms" value="lelah" aria-describedby="err-symptoms"><span>Mudah lelah</span></label>
+                  <label class="chip"><input type="checkbox" name="symptoms" value="berdebar" aria-describedby="err-symptoms"><span>Jantung berdebar</span></label>
+                  <label class="chip"><input type="checkbox" name="symptoms" value="sesak" aria-describedby="err-symptoms"><span>Sesak napas</span></label>
+                  <label class="chip"><input type="checkbox" name="symptoms" value="sakit-kepala" aria-describedby="err-symptoms"><span>Sakit kepala</span></label>
+                  <label class="chip"><input type="checkbox" name="symptoms" value="konsentrasi" aria-describedby="err-symptoms"><span>Sulit konsentrasi</span></label>
+                  <label class="chip chip-none"><input type="checkbox" name="symptoms" value="none" aria-describedby="err-symptoms"><span>Tidak ada gejala</span></label>
+                </div>
+                <p class="field-error" id="err-symptoms" hidden></p>
+              </fieldset>
+
+              <fieldset class="field choice-group danger-group">
+                <legend class="field-label"><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>Tanda bahaya</legend>
+                <p class="field-help">Pilih bila Anda mengalaminya saat ini atau baru-baru ini.</p>
+                <div class="chip-grid">
+                  <label class="chip chip-danger"><input type="checkbox" name="danger" value="pingsan" aria-describedby="err-danger"><span>Pingsan atau hampir pingsan</span></label>
+                  <label class="chip chip-danger"><input type="checkbox" name="danger" value="nyeri-dada" aria-describedby="err-danger"><span>Nyeri dada</span></label>
+                  <label class="chip chip-danger"><input type="checkbox" name="danger" value="sesak-berat" aria-describedby="err-danger"><span>Sesak napas berat</span></label>
+                  <label class="chip chip-danger"><input type="checkbox" name="danger" value="perdarahan-berat" aria-describedby="err-danger"><span>Perdarahan berat</span></label>
+                  <label class="chip chip-none"><input type="checkbox" name="danger" value="none" aria-describedby="err-danger"><span>Tidak ada tanda bahaya</span></label>
+                </div>
+                <p class="field-error" id="err-danger" hidden></p>
+              </fieldset>
+
+              <div class="callout callout-danger" id="danger-alert" role="alert" hidden>
+                <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>
+                <div>
+                  <p><strong>Tanda bahaya terdeteksi.</strong> Jangan menunggu hasil simulasi. Segera ke IGD atau fasilitas kesehatan terdekat, atau hubungi layanan gawat darurat <a href="tel:119">119</a>.</p>
+                </div>
+              </div>
+            </fieldset>
+
+            <div class="quiz-nav">
+              <button class="btn btn-ghost" type="button" id="quiz-prev"><svg class="icon" aria-hidden="true"><use href="#i-arrow-left"/></svg>Kembali</button>
+              <button class="btn btn-primary" type="button" id="quiz-next">Lanjut<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+              <button class="btn btn-primary" type="submit" id="quiz-submit" hidden><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg>Lihat Hasil</button>
+            </div>
+            <p class="sr-only" id="quiz-live" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== HASIL ============================== -->
+    <section class="page" id="page-hasil" data-page="hasil" data-title="Laporan Hasil Skrining" aria-labelledby="hasil-title">
+      <div class="container report-wrap">
+        <div class="report-toolbar no-print">
+          <a class="link-arrow link-back" href="#/simulasi"><svg class="icon" aria-hidden="true"><use href="#i-arrow-left"/></svg>Kembali ke simulasi</a>
+          <div class="report-buttons">
+            <button class="btn btn-ghost" type="button" data-action="restart"><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg>Ulangi Simulasi</button>
+            <button class="btn btn-primary" type="button" data-action="print"><svg class="icon" aria-hidden="true"><use href="#i-printer"/></svg>Cetak / Simpan PDF</button>
+          </div>
+        </div>
+
+        <article class="report" id="report">
+          <header class="report-header">
+            <div class="report-brand">
+              <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+                <rect width="48" height="48" rx="14" class="brand-mark-bg"/>
+                <use href="#rbc" x="9" y="9" width="30" height="30"/>
+                <path d="M21 24h6M24 21v6" class="brand-mark-plus"/>
+              </svg>
+              <div>
+                <p class="report-site">SIK Anemia · Sistem Informasi Kesehatan Anemia</p>
+                <h1 class="report-title" id="hasil-title" tabindex="-1">Laporan Hasil Skrining Anemia</h1>
+              </div>
+            </div>
+            <dl class="report-meta">
+              <div><dt>Dibuat</dt><dd id="r-date">–</dd></div>
+              <div><dt>Acuan</dt><dd>Ambang Hb WHO 2024</dd></div>
+            </dl>
+          </header>
+
+          <div class="callout callout-danger report-urgent" id="r-urgent" hidden>
+            <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+            <div>
+              <p class="callout-title">Perlu pertolongan medis segera</p>
+              <p id="r-urgent-text">–</p>
+            </div>
+          </div>
+
+          <section class="report-summary" id="r-summary" data-category="undetermined">
+            <div class="gauge-wrap">
+              <svg class="gauge" id="r-gauge" viewBox="0 0 320 196" role="img" aria-labelledby="r-gauge-title">
+                <title id="r-gauge-title">Indikator kadar hemoglobin</title>
+                <g id="r-gauge-zones"></g>
+                <g class="gauge-needle" id="r-gauge-needle">
+                  <path d="M160 170 L156 166 L160 62 L164 166 Z"/>
+                  <circle cx="160" cy="170" r="9"/>
+                </g>
+              </svg>
+              <p class="gauge-readout"><span class="gauge-value" id="r-hb-value">–</span><span class="gauge-unit">g/dL</span></p>
+              <p class="gauge-caption" id="r-gauge-caption" hidden></p>
+              <ul class="gauge-legend" id="r-gauge-legend"></ul>
+            </div>
+            <div class="summary-text">
+              <p class="summary-kicker">Kategori berdasarkan kadar Hb</p>
+              <h2 class="summary-category" id="r-category">Belum dapat ditentukan</h2>
+              <p class="summary-desc" id="r-category-desc">–</p>
+              <dl class="summary-facts" id="r-hb-facts"></dl>
+            </div>
+          </section>
+
+          <div class="report-grid">
+            <section class="report-card">
+              <h2><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>Informasi pengguna</h2>
+              <dl class="kv" id="r-profile"></dl>
+            </section>
+            <section class="report-card">
+              <h2><svg class="icon" aria-hidden="true"><use href="#i-droplet"/></svg>Ringkasan menstruasi</h2>
+              <dl class="kv" id="r-menstruation"></dl>
+            </section>
+            <section class="report-card">
+              <h2><svg class="icon" aria-hidden="true"><use href="#i-utensils"/></svg>Ringkasan pola makan</h2>
+              <dl class="kv" id="r-diet"></dl>
+            </section>
+            <section class="report-card">
+              <h2><svg class="icon" aria-hidden="true"><use href="#i-pill"/></svg>Konsumsi TTD</h2>
+              <dl class="kv" id="r-ttd"></dl>
+            </section>
+            <section class="report-card report-card-wide">
+              <h2><svg class="icon" aria-hidden="true"><use href="#i-activity"/></svg>Gejala yang dialami</h2>
+              <ul class="chip-list" id="r-symptoms"></ul>
+              <p class="danger-line" id="r-danger">–</p>
+            </section>
+          </div>
+
+          <section class="report-block">
+            <h2><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>Faktor risiko yang perlu diperhatikan</h2>
+            <p class="block-note">Faktor di bawah ini adalah indikator risiko, bukan dasar diagnosis atau tingkat keparahan anemia.</p>
+            <ul class="factor-list" id="r-factors"></ul>
+          </section>
+
+          <section class="report-block">
+            <h2><svg class="icon" aria-hidden="true"><use href="#i-stethoscope"/></svg>Rekomendasi edukatif</h2>
+            <ol class="rec-list" id="r-recs"></ol>
+          </section>
+
+          <section class="report-block">
+            <h2><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>Referensi medis</h2>
+            <ul class="ref-list">
+              <li><a href="https://www.ncbi.nlm.nih.gov/books/NBK602183/table/fm-ch1.tab2/" target="_blank" rel="noopener noreferrer">WHO (2024). Guideline on haemoglobin cutoffs to define anaemia in individuals and populations, tabel ambang Hb.</a></li>
+              <li><a href="https://www.who.int/news-room/fact-sheets/detail/anaemia" target="_blank" rel="noopener noreferrer">WHO. Fact sheet: Anaemia.</a></li>
+              <li><a href="https://www.badankebijakan.kemkes.go.id/hasil-utama-ski-2023/" target="_blank" rel="noopener noreferrer">BKPK Kemenkes RI. FAQ Hasil Utama SKI 2023.</a></li>
+              <li><a href="https://www.badankebijakan.kemkes.go.id/anemia-pada-remaja-putri-tantangan-pencegahan-melalui-konsumsi-tablet-tambah-darah/" target="_blank" rel="noopener noreferrer">BKPK Kemenkes RI. Anemia pada Remaja Putri dan konsumsi TTD.</a></li>
+              <li><a href="https://www.kemkes.go.id/id/menkes-tekankan-pentingnya-ragam-mikronutrien-bagi-ibu-hamil" target="_blank" rel="noopener noreferrer">Kemenkes RI (2024). MMS untuk ibu hamil.</a></li>
+            </ul>
+          </section>
+
+          <footer class="report-disclaimer">
+            <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+            <p><strong>Disclaimer:</strong> Skrining ini bersifat edukatif, bukan diagnosis, dan tidak menggantikan pemeriksaan maupun konsultasi dengan tenaga kesehatan. Kategori anemia hanya ditentukan dari kadar Hb yang Anda masukkan; jenis anemia tidak ditentukan. Data tidak disimpan dan akan hilang saat halaman ditutup atau dimuat ulang.</p>
+          </footer>
+        </article>
+
+        <div class="report-toolbar report-toolbar-bottom no-print">
+          <button class="btn btn-ghost" type="button" data-action="restart"><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg>Ulangi Simulasi</button>
+          <button class="btn btn-primary" type="button" data-action="print"><svg class="icon" aria-hidden="true"><use href="#i-printer"/></svg>Cetak / Simpan PDF</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="#/" aria-label="SIK Anemia, beranda">
+          <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+            <rect width="48" height="48" rx="14" class="brand-mark-bg"/>
+            <use href="#rbc" x="9" y="9" width="30" height="30"/>
+            <path d="M21 24h6M24 21v6" class="brand-mark-plus"/>
+          </svg>
+          <span class="brand-text"><strong>SIK Anemia</strong><small>Sistem Informasi Kesehatan Anemia</small></span>
+        </a>
+        <p>Media edukasi kesehatan tentang anemia. Konten disusun dari pedoman WHO dan data Kementerian Kesehatan RI.</p>
+      </div>
+      <nav class="footer-col" aria-label="Navigasi bawah">
+        <h2 class="footer-title">Jelajahi</h2>
+        <ul>
+          <li><a href="#/">Beranda</a></li>
+          <li><a href="#/informasi">Informasi Anemia</a></li>
+          <li><a href="#/data">Data Anemia</a></li>
+          <li><a href="#/simulasi">Simulasi Skrining</a></li>
+        </ul>
+      </nav>
+      <div class="footer-col">
+        <h2 class="footer-title">Sumber utama</h2>
+        <ul>
+          <li><a href="https://www.who.int/publications/i/item/9789240088542" target="_blank" rel="noopener noreferrer">WHO 2024: ambang hemoglobin</a></li>
+          <li><a href="https://www.who.int/news-room/fact-sheets/detail/anaemia" target="_blank" rel="noopener noreferrer">WHO Fact sheet: Anaemia</a></li>
+          <li><a href="https://www.badankebijakan.kemkes.go.id/hasil-utama-ski-2023/" target="_blank" rel="noopener noreferrer">Kemenkes: Hasil Utama SKI 2023</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h2 class="footer-title">Privasi dan batasan</h2>
+        <p>Jawaban simulasi diproses di perangkat Anda, tidak dikirim ke server, dan tidak disimpan. Situs hanya memuat huruf dari Google Fonts. Informasi di situs ini tidak menggantikan saran tenaga kesehatan.</p>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>© 2026 SIK Anemia · Media edukasi kesehatan</p>
+      <a class="back-to-top" href="#top">Kembali ke atas<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status"></div>
+</body>
+</html>

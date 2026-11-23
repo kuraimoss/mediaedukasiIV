@@ -1,0 +1,87 @@
+name: CI/CD GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Hanya satu deployment Pages yang berjalan; deployment yang sedang berlangsung tidak dibatalkan.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Pemeriksaan dan artefak situs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ambil kode
+        uses: actions/checkout@v7
+
+      - name: Siapkan Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Validasi HTML (html-validate)
+        run: npm run lint:html
+
+      - name: Lint CSS (stylelint)
+        run: npm run lint:css
+
+      - name: Periksa JavaScript (node --check dan ESLint)
+        run: npm run lint:js
+
+      - name: Tes logika skrining dan pemeriksaan statis
+        run: npm test
+
+      - name: Susun artefak (hanya file publik situs)
+        run: |
+          mkdir -p _site
+          cp index.html style.css script.js _site/
+          cp -R assets _site/assets
+          echo "Isi artefak yang akan dipublikasikan:"
+          find _site -type f | sort
+
+      - name: Konfigurasi GitHub Pages
+        uses: actions/configure-pages@v6
+
+      - name: Unggah artefak Pages
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy ke GitHub Pages
+    needs: check
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v5
+
+      - name: Uji situs online
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          for attempt in $(seq 1 12); do
+            if curl -fsSL "$PAGE_URL" | grep -q "SIK Anemia"; then
+              curl -fsSL -o /dev/null "${PAGE_URL}style.css"
+              curl -fsSL -o /dev/null "${PAGE_URL}script.js"
+              curl -fsSL -o /dev/null "${PAGE_URL}assets/icons/favicon.svg"
+              echo "Situs online dan aset utama termuat: $PAGE_URL"
+              exit 0
+            fi
+            echo "Percobaan $attempt: situs belum siap, menunggu 10 detik..."
+            sleep 10
+          done
+          echo "Situs belum dapat diakses: $PAGE_URL"
+          exit 1
