@@ -73,7 +73,7 @@ jobs:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
         run: |
           for attempt in $(seq 1 12); do
-            if curl -fsSL "$PAGE_URL" | grep -q "SIK Anemia"; then
+            if curl -fsSL "$PAGE_URL" | grep -q "Kesdig Anemia"; then
               curl -fsSL -o /dev/null "${PAGE_URL}style.css"
               curl -fsSL -o /dev/null "${PAGE_URL}script.js"
               curl -fsSL -o /dev/null "${PAGE_URL}assets/icons/favicon.svg"

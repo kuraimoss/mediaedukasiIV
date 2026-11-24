@@ -1,4 +1,4 @@
-# SIK Anemia · Sistem Informasi Kesehatan Anemia
+# Kesdig Anemia · Kesehatan Digital Anemia
 
 [![CI/CD GitHub Pages](https://github.com/kuraimoss/mediaedukasiIV/actions/workflows/deploy.yml/badge.svg)](https://github.com/kuraimoss/mediaedukasiIV/actions/workflows/deploy.yml)
 

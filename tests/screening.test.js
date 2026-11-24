@@ -1,13 +1,13 @@
 'use strict';
 /**
- * Pengujian logika skrining SIK Anemia (rule-based, pedoman WHO 2024).
+ * Pengujian logika skrining Kesdig Anemia (rule-based, pedoman WHO 2024).
  * Jalankan: npm test
  */
 const { describe, test } = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('node:path');
 
-const SIK = require(path.join(__dirname, '..', 'script.js'));
+const Kesdig = require(path.join(__dirname, '..', 'script.js'));
 
 function baseAnswers(overrides) {
   return Object.assign({
@@ -36,38 +36,38 @@ function factorIds(result) {
 
 describe('parseHb', () => {
   test('menerima titik dan koma sebagai pemisah desimal', () => {
-    assert.deepEqual(SIK.parseHb('11.5'), { ok: true, value: 11.5 });
-    assert.deepEqual(SIK.parseHb('11,5'), { ok: true, value: 11.5 });
-    assert.deepEqual(SIK.parseHb(' 12 '), { ok: true, value: 12 });
+    assert.deepEqual(Kesdig.parseHb('11.5'), { ok: true, value: 11.5 });
+    assert.deepEqual(Kesdig.parseHb('11,5'), { ok: true, value: 11.5 });
+    assert.deepEqual(Kesdig.parseHb(' 12 '), { ok: true, value: 12 });
   });
 
   test('menolak input kosong dan format yang salah', () => {
-    assert.equal(SIK.parseHb('').reason, 'empty');
-    assert.equal(SIK.parseHb(null).reason, 'empty');
-    assert.equal(SIK.parseHb('abc').reason, 'format');
-    assert.equal(SIK.parseHb('11.5.2').reason, 'format');
-    assert.equal(SIK.parseHb('-9').reason, 'format');
+    assert.equal(Kesdig.parseHb('').reason, 'empty');
+    assert.equal(Kesdig.parseHb(null).reason, 'empty');
+    assert.equal(Kesdig.parseHb('abc').reason, 'format');
+    assert.equal(Kesdig.parseHb('11.5.2').reason, 'format');
+    assert.equal(Kesdig.parseHb('-9').reason, 'format');
   });
 
   test('menolak nilai di luar rentang 3–25 g/dL', () => {
-    assert.equal(SIK.parseHb('2.9').reason, 'range');
-    assert.equal(SIK.parseHb('25.1').reason, 'range');
-    assert.equal(SIK.parseHb('3').ok, true);
-    assert.equal(SIK.parseHb('25').ok, true);
+    assert.equal(Kesdig.parseHb('2.9').reason, 'range');
+    assert.equal(Kesdig.parseHb('25.1').reason, 'range');
+    assert.equal(Kesdig.parseHb('3').ok, true);
+    assert.equal(Kesdig.parseHb('25').ok, true);
   });
 
   test('mengenali nilai yang tampaknya ditulis dalam g/L', () => {
-    assert.equal(SIK.parseHb('115').reason, 'gl');
-    assert.equal(SIK.parseHb('130,5').reason, 'gl');
+    assert.equal(Kesdig.parseHb('115').reason, 'gl');
+    assert.equal(Kesdig.parseHb('130,5').reason, 'gl');
   });
 });
 
 describe('toGL', () => {
   test('mengonversi g/dL ke g/L tanpa galat pembulatan', () => {
-    assert.equal(SIK.toGL(11.9), 119);
-    assert.equal(SIK.toGL(11.95), 119.5);
-    assert.equal(SIK.toGL(10.5), 105);
-    assert.equal(SIK.toGL(8.1), 81);
+    assert.equal(Kesdig.toGL(11.9), 119);
+    assert.equal(Kesdig.toGL(11.95), 119.5);
+    assert.equal(Kesdig.toGL(10.5), 105);
+    assert.equal(Kesdig.toGL(8.1), 81);
   });
 });
 
@@ -93,43 +93,43 @@ describe('getReferenceGroup (kelompok acuan WHO 2024)', () => {
 
   for (const [profile, expected] of cases) {
     test(`${JSON.stringify(profile)} → ${expected}`, () => {
-      assert.equal(SIK.getReferenceGroup(profile).id, expected);
+      assert.equal(Kesdig.getReferenceGroup(profile).id, expected);
     });
   }
 
   test('bayi di bawah 6 bulan tidak memiliki ambang di tabel WHO 2024', () => {
-    const group = SIK.getReferenceGroup({ ageYears: 0, ageMonths: 5 });
+    const group = Kesdig.getReferenceGroup({ ageYears: 0, ageMonths: 5 });
     assert.equal(group.id, null);
     assert.equal(group.reason, 'infant');
   });
 
   test('usia di atas 65 tahun berada di luar cakupan tabel WHO 2024', () => {
-    const group = SIK.getReferenceGroup({ ageYears: 66, sex: 'female', pregnant: 'no' });
+    const group = Kesdig.getReferenceGroup({ ageYears: 66, sex: 'female', pregnant: 'no' });
     assert.equal(group.id, null);
     assert.equal(group.reason, 'over65');
   });
 
   test('ibu hamil tanpa trimester belum dapat ditentukan', () => {
-    const group = SIK.getReferenceGroup({ ageYears: 28, sex: 'female', pregnant: 'yes', trimester: null });
+    const group = Kesdig.getReferenceGroup({ ageYears: 28, sex: 'female', pregnant: 'yes', trimester: null });
     assert.equal(group.id, null);
     assert.equal(group.reason, 'trimester');
   });
 
   test('usia 15 tahun ke atas wajib memiliki jenis kelamin', () => {
-    const group = SIK.getReferenceGroup({ ageYears: 20, sex: null });
+    const group = Kesdig.getReferenceGroup({ ageYears: 20, sex: null });
     assert.equal(group.id, null);
     assert.equal(group.reason, 'sex');
   });
 
   test('anak di bawah 5 tahun wajib memiliki usia dalam bulan yang konsisten', () => {
-    assert.equal(SIK.getReferenceGroup({ ageYears: 2 }).reason, 'months');
-    assert.equal(SIK.getReferenceGroup({ ageYears: 2, ageMonths: 40 }).reason, 'months');
+    assert.equal(Kesdig.getReferenceGroup({ ageYears: 2 }).reason, 'months');
+    assert.equal(Kesdig.getReferenceGroup({ ageYears: 2, ageMonths: 40 }).reason, 'months');
   });
 
   test('usia tidak valid ditolak', () => {
-    assert.equal(SIK.getReferenceGroup({ ageYears: -1, sex: 'male' }).reason, 'age');
-    assert.equal(SIK.getReferenceGroup({ ageYears: Number.NaN, sex: 'male' }).reason, 'age');
-    assert.equal(SIK.getReferenceGroup({ ageYears: 121, sex: 'male' }).reason, 'age');
+    assert.equal(Kesdig.getReferenceGroup({ ageYears: -1, sex: 'male' }).reason, 'age');
+    assert.equal(Kesdig.getReferenceGroup({ ageYears: Number.NaN, sex: 'male' }).reason, 'age');
+    assert.equal(Kesdig.getReferenceGroup({ ageYears: 121, sex: 'male' }).reason, 'age');
   });
 });
 
@@ -156,20 +156,20 @@ describe('classifyHb (batas kategori WHO 2024, g/L)', () => {
 
   for (const [group, gL, expected] of cases) {
     test(`${group} Hb ${gL} g/L → ${expected}`, () => {
-      assert.equal(SIK.classifyHb(gL, group), expected);
+      assert.equal(Kesdig.classifyHb(gL, group), expected);
     });
   }
 });
 
 describe('rangeLabels (teks ambang dalam g/dL)', () => {
   test('perempuan tidak hamil 15–65 tahun', () => {
-    assert.deepEqual(SIK.rangeLabels('women-15-65y'), {
+    assert.deepEqual(Kesdig.rangeLabels('women-15-65y'), {
       none: '≥ 12,0', mild: '11,0–11,9', moderate: '8,0–10,9', severe: '< 8,0'
     });
   });
 
   test('ibu hamil trimester 2', () => {
-    assert.deepEqual(SIK.rangeLabels('pregnant-t2'), {
+    assert.deepEqual(Kesdig.rangeLabels('pregnant-t2'), {
       none: '≥ 10,5', mild: '9,5–10,4', moderate: '7,0–9,4', severe: '< 7,0'
     });
   });
@@ -177,62 +177,62 @@ describe('rangeLabels (teks ambang dalam g/dL)', () => {
 
 describe('hbAdjustment (penyesuaian WHO 2024)', () => {
   test('ketinggian tempat tinggal dan kebiasaan merokok dijumlahkan', () => {
-    assert.deepEqual(SIK.hbAdjustment({ elevation: '1000', smoking: '10to19' }), { elevation: 8, smoking: 5, total: 13 });
+    assert.deepEqual(Kesdig.hbAdjustment({ elevation: '1000', smoking: '10to19' }), { elevation: 8, smoking: 5, total: 13 });
   });
 
   test('dataran rendah dan tidak merokok tidak disesuaikan', () => {
-    assert.deepEqual(SIK.hbAdjustment({ elevation: '0', smoking: 'no' }), { elevation: 0, smoking: 0, total: 0 });
+    assert.deepEqual(Kesdig.hbAdjustment({ elevation: '0', smoking: 'no' }), { elevation: 0, smoking: 0, total: 0 });
   });
 
   test('nilai tidak dikenal dianggap tanpa penyesuaian', () => {
-    assert.deepEqual(SIK.hbAdjustment({ elevation: 'xyz', smoking: undefined }), { elevation: 0, smoking: 0, total: 0 });
+    assert.deepEqual(Kesdig.hbAdjustment({ elevation: 'xyz', smoking: undefined }), { elevation: 0, smoking: 0, total: 0 });
   });
 
   test('tabel ketinggian sesuai kelipatan 500 m', () => {
     const expected = { 0: 0, 500: 4, 1000: 8, 1500: 11, 2000: 14, 2500: 18, 3000: 21, 3500: 25, 4000: 29, 4500: 33 };
     for (const [key, adj] of Object.entries(expected)) {
-      assert.equal(SIK.hbAdjustment({ elevation: key, smoking: 'no' }).elevation, adj, `ketinggian ${key}`);
+      assert.equal(Kesdig.hbAdjustment({ elevation: key, smoking: 'no' }).elevation, adj, `ketinggian ${key}`);
     }
   });
 
   test('tabel merokok', () => {
     const expected = { no: 0, unknown: 3, lt10: 3, '10to19': 5, gte20: 6 };
     for (const [key, adj] of Object.entries(expected)) {
-      assert.equal(SIK.hbAdjustment({ elevation: '0', smoking: key }).smoking, adj, `merokok ${key}`);
+      assert.equal(Kesdig.hbAdjustment({ elevation: '0', smoking: key }).smoking, adj, `merokok ${key}`);
     }
   });
 });
 
 describe('relevansi pertanyaan', () => {
   test('pertanyaan menstruasi hanya untuk perempuan tidak hamil usia 9–55 tahun', () => {
-    assert.equal(SIK.isMenstruationRelevant({ ageYears: 16, sex: 'female', pregnant: 'no' }), true);
-    assert.equal(SIK.isMenstruationRelevant({ ageYears: 9, sex: 'female', pregnant: 'no' }), true);
-    assert.equal(SIK.isMenstruationRelevant({ ageYears: 8, sex: 'female', pregnant: 'no' }), false);
-    assert.equal(SIK.isMenstruationRelevant({ ageYears: 56, sex: 'female', pregnant: 'no' }), false);
-    assert.equal(SIK.isMenstruationRelevant({ ageYears: 25, sex: 'female', pregnant: 'yes' }), false);
-    assert.equal(SIK.isMenstruationRelevant({ ageYears: 25, sex: 'male' }), false);
+    assert.equal(Kesdig.isMenstruationRelevant({ ageYears: 16, sex: 'female', pregnant: 'no' }), true);
+    assert.equal(Kesdig.isMenstruationRelevant({ ageYears: 9, sex: 'female', pregnant: 'no' }), true);
+    assert.equal(Kesdig.isMenstruationRelevant({ ageYears: 8, sex: 'female', pregnant: 'no' }), false);
+    assert.equal(Kesdig.isMenstruationRelevant({ ageYears: 56, sex: 'female', pregnant: 'no' }), false);
+    assert.equal(Kesdig.isMenstruationRelevant({ ageYears: 25, sex: 'female', pregnant: 'yes' }), false);
+    assert.equal(Kesdig.isMenstruationRelevant({ ageYears: 25, sex: 'male' }), false);
   });
 
   test('pertanyaan kehamilan hanya untuk perempuan usia 10–55 tahun', () => {
-    assert.equal(SIK.isPregnancyRelevant({ ageYears: 10, sex: 'female' }), true);
-    assert.equal(SIK.isPregnancyRelevant({ ageYears: 55, sex: 'female' }), true);
-    assert.equal(SIK.isPregnancyRelevant({ ageYears: 9, sex: 'female' }), false);
-    assert.equal(SIK.isPregnancyRelevant({ ageYears: 30, sex: 'male' }), false);
+    assert.equal(Kesdig.isPregnancyRelevant({ ageYears: 10, sex: 'female' }), true);
+    assert.equal(Kesdig.isPregnancyRelevant({ ageYears: 55, sex: 'female' }), true);
+    assert.equal(Kesdig.isPregnancyRelevant({ ageYears: 9, sex: 'female' }), false);
+    assert.equal(Kesdig.isPregnancyRelevant({ ageYears: 30, sex: 'male' }), false);
   });
 
   test('kelompok sasaran TTD: ibu hamil harian, remaja putri dan WUS mingguan', () => {
-    assert.equal(SIK.ttdTarget({ ageYears: 28, sex: 'female', pregnant: 'yes' }), 'daily');
-    assert.equal(SIK.ttdTarget({ ageYears: 12, sex: 'female', pregnant: 'no' }), 'weekly');
-    assert.equal(SIK.ttdTarget({ ageYears: 49, sex: 'female', pregnant: 'no' }), 'weekly');
-    assert.equal(SIK.ttdTarget({ ageYears: 50, sex: 'female', pregnant: 'no' }), null);
-    assert.equal(SIK.ttdTarget({ ageYears: 11, sex: 'female', pregnant: 'no' }), null);
-    assert.equal(SIK.ttdTarget({ ageYears: 30, sex: 'male' }), null);
+    assert.equal(Kesdig.ttdTarget({ ageYears: 28, sex: 'female', pregnant: 'yes' }), 'daily');
+    assert.equal(Kesdig.ttdTarget({ ageYears: 12, sex: 'female', pregnant: 'no' }), 'weekly');
+    assert.equal(Kesdig.ttdTarget({ ageYears: 49, sex: 'female', pregnant: 'no' }), 'weekly');
+    assert.equal(Kesdig.ttdTarget({ ageYears: 50, sex: 'female', pregnant: 'no' }), null);
+    assert.equal(Kesdig.ttdTarget({ ageYears: 11, sex: 'female', pregnant: 'no' }), null);
+    assert.equal(Kesdig.ttdTarget({ ageYears: 30, sex: 'male' }), null);
   });
 });
 
 describe('evaluate (hasil skrining)', () => {
   test('Hb tidak diketahui → Belum dapat ditentukan walau banyak gejala dan faktor risiko', () => {
-    const result = SIK.evaluate(baseAnswers({
+    const result = Kesdig.evaluate(baseAnswers({
       hbKnown: 'no',
       hbValue: '',
       symptoms: ['lemas', 'pusing', 'pucat', 'lelah'],
@@ -245,23 +245,23 @@ describe('evaluate (hasil skrining)', () => {
   });
 
   test('label kategori sesuai spesifikasi', () => {
-    assert.equal(SIK.evaluate(baseAnswers({ hbValue: '12.0' })).hb.label, 'Tidak memenuhi kriteria anemia berdasarkan Hb');
-    assert.equal(SIK.evaluate(baseAnswers({ hbValue: '11.5' })).hb.label, 'Anemia ringan');
-    assert.equal(SIK.evaluate(baseAnswers({ hbValue: '9,0' })).hb.label, 'Anemia sedang');
-    assert.equal(SIK.evaluate(baseAnswers({ hbValue: '7.9' })).hb.label, 'Anemia berat');
+    assert.equal(Kesdig.evaluate(baseAnswers({ hbValue: '12.0' })).hb.label, 'Tidak memenuhi kriteria anemia berdasarkan Hb');
+    assert.equal(Kesdig.evaluate(baseAnswers({ hbValue: '11.5' })).hb.label, 'Anemia ringan');
+    assert.equal(Kesdig.evaluate(baseAnswers({ hbValue: '9,0' })).hb.label, 'Anemia sedang');
+    assert.equal(Kesdig.evaluate(baseAnswers({ hbValue: '7.9' })).hb.label, 'Anemia berat');
   });
 
   test('kehamilan trimester 2 memakai ambang 10,5 g/dL, trimester 1 memakai 11,0 g/dL', () => {
-    const t2 = SIK.evaluate(baseAnswers({ pregnant: 'yes', trimester: 2, hbValue: '10.5' }));
-    const t1 = SIK.evaluate(baseAnswers({ pregnant: 'yes', trimester: 1, hbValue: '10.5' }));
+    const t2 = Kesdig.evaluate(baseAnswers({ pregnant: 'yes', trimester: 2, hbValue: '10.5' }));
+    const t1 = Kesdig.evaluate(baseAnswers({ pregnant: 'yes', trimester: 1, hbValue: '10.5' }));
     assert.equal(t2.hb.category, 'none');
     assert.equal(t1.hb.category, 'mild');
     assert.equal(t2.profile.group.id, 'pregnant-t2');
   });
 
   test('faktor risiko tidak mengubah kategori Hb', () => {
-    const healthy = SIK.evaluate(baseAnswers({ hbValue: '11.4' }));
-    const risky = SIK.evaluate(baseAnswers({
+    const healthy = Kesdig.evaluate(baseAnswers({ hbValue: '11.4' }));
+    const risky = Kesdig.evaluate(baseAnswers({
       hbValue: '11.4',
       menstruation: { status: 'active', regularity: 'irregular', duration: 'gt7', volume: 'heavy' },
       diet: { ironFreq: 'rarely', meals: '1', breakfast: 'rarely', teaCoffee: 'often' },
@@ -273,7 +273,7 @@ describe('evaluate (hasil skrining)', () => {
   });
 
   test('tanda bahaya memicu rekomendasi darurat di urutan pertama', () => {
-    const result = SIK.evaluate(baseAnswers({ danger: ['pingsan', 'nyeri-dada'] }));
+    const result = Kesdig.evaluate(baseAnswers({ danger: ['pingsan', 'nyeri-dada'] }));
     assert.equal(result.danger.present, true);
     assert.deepEqual(result.danger.list, ['Pingsan atau hampir pingsan', 'Nyeri dada']);
     assert.equal(result.urgent, true);
@@ -282,29 +282,29 @@ describe('evaluate (hasil skrining)', () => {
   });
 
   test('opsi "tidak ada tanda bahaya" tidak dihitung sebagai tanda bahaya', () => {
-    const result = SIK.evaluate(baseAnswers({ danger: ['none'] }));
+    const result = Kesdig.evaluate(baseAnswers({ danger: ['none'] }));
     assert.equal(result.danger.present, false);
     assert.equal(result.urgent, false);
   });
 
   test('anemia berat memicu rekomendasi darurat', () => {
-    const result = SIK.evaluate(baseAnswers({ hbValue: '7.0' }));
+    const result = Kesdig.evaluate(baseAnswers({ hbValue: '7.0' }));
     assert.equal(result.hb.category, 'severe');
     assert.equal(result.urgent, true);
     assert.ok(result.recommendations.some((r) => r.id === 'severe' && r.priority === 'urgent'));
   });
 
   test('penyesuaian ketinggian menurunkan Hb terkoreksi', () => {
-    const result = SIK.evaluate(baseAnswers({ hbValue: '12.2', elevation: '500' }));
+    const result = Kesdig.evaluate(baseAnswers({ hbValue: '12.2', elevation: '500' }));
     assert.equal(result.hb.measured, 12.2);
     assert.equal(result.hb.adjusted, 11.8);
     assert.equal(result.hb.adjustment.total, 4);
     assert.equal(result.hb.category, 'mild');
-    assert.equal(SIK.evaluate(baseAnswers({ hbValue: '12.2' })).hb.category, 'none');
+    assert.equal(Kesdig.evaluate(baseAnswers({ hbValue: '12.2' })).hb.category, 'none');
   });
 
   test('penyesuaian merokok diterapkan', () => {
-    const result = SIK.evaluate(baseAnswers({
+    const result = Kesdig.evaluate(baseAnswers({
       sex: 'male', ageYears: 30, hbValue: '13.2', smoking: 'gte20', menstruation: null, ttd: { use: 'na' }
     }));
     assert.equal(result.hb.adjusted, 12.6);
@@ -312,7 +312,7 @@ describe('evaluate (hasil skrining)', () => {
   });
 
   test('pertanyaan menstruasi diabaikan untuk laki-laki', () => {
-    const result = SIK.evaluate(baseAnswers({
+    const result = Kesdig.evaluate(baseAnswers({
       sex: 'male', ageYears: 30, hbValue: '14',
       menstruation: { status: 'active', regularity: 'irregular', duration: 'gt7', volume: 'heavy' },
       ttd: { use: 'na' }
@@ -322,7 +322,7 @@ describe('evaluate (hasil skrining)', () => {
   });
 
   test('menstruasi banyak, lama, dan tidak teratur menjadi faktor risiko', () => {
-    const result = SIK.evaluate(baseAnswers({
+    const result = Kesdig.evaluate(baseAnswers({
       menstruation: { status: 'active', regularity: 'irregular', duration: 'gt7', volume: 'heavy' }
     }));
     const ids = factorIds(result);
@@ -332,21 +332,21 @@ describe('evaluate (hasil skrining)', () => {
   });
 
   test('menstruasi tidak dinilai bila belum atau sudah berhenti menstruasi', () => {
-    const result = SIK.evaluate(baseAnswers({
+    const result = Kesdig.evaluate(baseAnswers({
       menstruation: { status: 'stopped', regularity: 'irregular', duration: 'gt7', volume: 'heavy' }
     }));
     assert.ok(!factorIds(result).some((id) => id.startsWith('menstruation')));
   });
 
   test('frekuensi makanan sumber zat besi yang rendah menjadi faktor risiko', () => {
-    const low = SIK.evaluate(baseAnswers({ diet: { ironFreq: 'sometimes', meals: '3plus', breakfast: 'daily', teaCoffee: 'never' } }));
-    const ok = SIK.evaluate(baseAnswers({ diet: { ironFreq: 'often', meals: '3plus', breakfast: 'daily', teaCoffee: 'never' } }));
+    const low = Kesdig.evaluate(baseAnswers({ diet: { ironFreq: 'sometimes', meals: '3plus', breakfast: 'daily', teaCoffee: 'never' } }));
+    const ok = Kesdig.evaluate(baseAnswers({ diet: { ironFreq: 'often', meals: '3plus', breakfast: 'daily', teaCoffee: 'never' } }));
     assert.ok(factorIds(low).includes('iron-low'));
     assert.ok(!factorIds(ok).includes('iron-low'));
   });
 
   test('kebiasaan makan lain dinilai: makan utama, sarapan, teh/kopi', () => {
-    const result = SIK.evaluate(baseAnswers({ diet: { ironFreq: 'daily', meals: '2', breakfast: 'rarely', teaCoffee: 'often' } }));
+    const result = Kesdig.evaluate(baseAnswers({ diet: { ironFreq: 'daily', meals: '2', breakfast: 'rarely', teaCoffee: 'often' } }));
     const ids = factorIds(result);
     assert.ok(ids.includes('meals-low'));
     assert.ok(ids.includes('breakfast-skip'));
@@ -354,24 +354,24 @@ describe('evaluate (hasil skrining)', () => {
   });
 
   test('remaja putri yang tidak minum TTD ditandai', () => {
-    const result = SIK.evaluate(baseAnswers({ ageYears: 16, ttd: { use: 'no' } }));
+    const result = Kesdig.evaluate(baseAnswers({ ageYears: 16, ttd: { use: 'no' } }));
     assert.equal(result.ttd.target, 'weekly');
     assert.ok(factorIds(result).includes('ttd-none'));
   });
 
   test('TTD yang sering terlewat ditandai belum rutin', () => {
-    const result = SIK.evaluate(baseAnswers({ ageYears: 16, ttd: { use: 'yes', frequency: 'weekly', adherence: 'often-missed' } }));
+    const result = Kesdig.evaluate(baseAnswers({ ageYears: 16, ttd: { use: 'yes', frequency: 'weekly', adherence: 'often-missed' } }));
     assert.ok(factorIds(result).includes('ttd-irregular'));
   });
 
   test('laki-laki dengan opsi TTD tidak berlaku tidak ditandai', () => {
-    const result = SIK.evaluate(baseAnswers({ sex: 'male', ageYears: 30, hbValue: '14', menstruation: null, ttd: { use: 'na' } }));
+    const result = Kesdig.evaluate(baseAnswers({ sex: 'male', ageYears: 30, hbValue: '14', menstruation: null, ttd: { use: 'na' } }));
     assert.equal(result.ttd.target, null);
     assert.ok(!factorIds(result).some((id) => id.startsWith('ttd')));
   });
 
   test('ibu hamil yang minum TTD seminggu sekali ditandai di bawah anjuran', () => {
-    const result = SIK.evaluate(baseAnswers({
+    const result = Kesdig.evaluate(baseAnswers({
       pregnant: 'yes', trimester: 2, hbValue: '11', ttd: { use: 'yes', frequency: 'weekly', adherence: 'always' }
     }));
     assert.ok(factorIds(result).includes('ttd-below'));
@@ -379,14 +379,14 @@ describe('evaluate (hasil skrining)', () => {
   });
 
   test('dua gejala atau lebih dicatat sebagai indikator, bukan diagnosis', () => {
-    const result = SIK.evaluate(baseAnswers({ symptoms: ['lemas', 'pucat'] }));
+    const result = Kesdig.evaluate(baseAnswers({ symptoms: ['lemas', 'pucat'] }));
     assert.deepEqual(result.symptoms.list, ['Lemas', 'Pucat']);
     assert.ok(factorIds(result).includes('symptoms'));
     assert.equal(result.hb.category, 'none');
   });
 
   test('hasil tidak pernah menyebut jenis anemia', () => {
-    const result = SIK.evaluate(baseAnswers({
+    const result = Kesdig.evaluate(baseAnswers({
       hbValue: '8.5',
       menstruation: { status: 'active', regularity: 'irregular', duration: 'gt7', volume: 'heavy' },
       diet: { ironFreq: 'rarely', meals: '1', breakfast: 'rarely', teaCoffee: 'often' },
@@ -398,31 +398,31 @@ describe('evaluate (hasil skrining)', () => {
   });
 
   test('Hb lebih dari 6 bulan lalu menambah saran pemeriksaan ulang', () => {
-    const result = SIK.evaluate(baseAnswers({ hbTestedWhen: 'old' }));
+    const result = Kesdig.evaluate(baseAnswers({ hbTestedWhen: 'old' }));
     assert.ok(result.recommendations.some((r) => r.id === 'recheck'));
   });
 
   test('usia di atas 65 tahun dengan Hb → belum dapat ditentukan', () => {
-    const result = SIK.evaluate(baseAnswers({ ageYears: 70, hbValue: '11', menstruation: null, ttd: { use: 'na' } }));
+    const result = Kesdig.evaluate(baseAnswers({ ageYears: 70, hbValue: '11', menstruation: null, ttd: { use: 'na' } }));
     assert.equal(result.hb.category, 'undetermined');
     assert.equal(result.hb.reason, 'over65');
     assert.equal(result.hb.measured, 11);
   });
 
   test('nilai Hb tidak valid tidak diklasifikasikan', () => {
-    const result = SIK.evaluate(baseAnswers({ hbValue: '115' }));
+    const result = Kesdig.evaluate(baseAnswers({ hbValue: '115' }));
     assert.equal(result.hb.category, 'undetermined');
     assert.equal(result.hb.reason, 'invalid');
   });
 
   test('nama dirapikan, dibatasi 40 karakter, dan diberi nama bawaan', () => {
-    assert.equal(SIK.evaluate(baseAnswers({ name: '   Sari   Dewi  ' })).profile.name, 'Sari Dewi');
-    assert.equal(SIK.evaluate(baseAnswers({ name: '' })).profile.name, 'Pengguna');
-    assert.equal(SIK.evaluate(baseAnswers({ name: 'a'.repeat(80) })).profile.name.length, 40);
+    assert.equal(Kesdig.evaluate(baseAnswers({ name: '   Sari   Dewi  ' })).profile.name, 'Sari Dewi');
+    assert.equal(Kesdig.evaluate(baseAnswers({ name: '' })).profile.name, 'Pengguna');
+    assert.equal(Kesdig.evaluate(baseAnswers({ name: 'a'.repeat(80) })).profile.name.length, 40);
   });
 
   test('skala indikator Hb mencakup zona sesuai ambang kelompok', () => {
-    const result = SIK.evaluate(baseAnswers({ hbValue: '11.5' }));
+    const result = Kesdig.evaluate(baseAnswers({ hbValue: '11.5' }));
     const zones = result.hb.scale.zones.map((z) => [z.key, z.from, z.to]);
     assert.deepEqual(zones, [['severe', 6, 8], ['moderate', 8, 11], ['mild', 11, 12], ['none', 12, 16]]);
   });
@@ -430,8 +430,8 @@ describe('evaluate (hasil skrining)', () => {
 
 describe('DATA statistik', () => {
   test('setiap dataset punya sumber resmi dan tahun', () => {
-    const { sources } = SIK.DATA;
-    for (const [key, dataset] of Object.entries(SIK.DATA)) {
+    const { sources } = Kesdig.DATA;
+    for (const [key, dataset] of Object.entries(Kesdig.DATA)) {
       if (key === 'sources') continue;
       assert.ok(sources[dataset.source], `sumber ${dataset.source} untuk ${key}`);
       assert.match(sources[dataset.source].url, /^https:\/\/(www\.)?(who\.int|badankebijakan\.kemkes\.go\.id|kemkes\.go\.id)\//);
@@ -439,7 +439,7 @@ describe('DATA statistik', () => {
   });
 
   test('nilai persentase berada di rentang 0–100 dan seri tren konsisten', () => {
-    const { comparison, trend } = SIK.DATA;
+    const { comparison, trend } = Kesdig.DATA;
     for (const row of comparison.rows) {
       assert.ok(row.year >= 2019 && row.year <= 2023);
       for (const v of [row.indonesia, row.global]) assert.ok(v > 0 && v < 100);

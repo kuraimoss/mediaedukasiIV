@@ -1,5 +1,5 @@
 /*!
- * SIK Anemia — Sistem Informasi Kesehatan Anemia
+ * Kesdig Anemia — Kesehatan Digital Anemia
  * Logika skrining rule-based (ambang Hb WHO 2024) dan antarmuka situs.
  * Semua jawaban diproses di perangkat pengguna: tidak disimpan dan tidak dikirim ke mana pun.
  */
@@ -14,7 +14,7 @@
     module.exports = api;
   }
   if (root) {
-    root.SIKAnemia = api;
+    root.KesdigAnemia = api;
   }
 }(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
@@ -801,7 +801,7 @@
     return;
   }
 
-  var SIK = window.SIKAnemia;
+  var Kesdig = window.KesdigAnemia;
   var doc = document;
   var root = doc.documentElement;
   var SVG_NS = 'http://www.w3.org/2000/svg';
@@ -1156,7 +1156,7 @@
         link.removeAttribute('aria-current');
       }
     });
-    doc.title = name === 'beranda' ? BASE_TITLE : page.getAttribute('data-title') + ' · SIK Anemia';
+    doc.title = name === 'beranda' ? BASE_TITLE : page.getAttribute('data-title') + ' · Kesdig Anemia';
     var firstLoad = currentRoute === null;
     currentRoute = name;
     if (!firstLoad) {
@@ -1303,7 +1303,7 @@
   }
 
   function renderComparison(container) {
-    var data = SIK.DATA.comparison;
+    var data = Kesdig.DATA.comparison;
     var max = 50;
     clear(container);
     var chart = el('div', 'hbar-chart');
@@ -1368,7 +1368,7 @@
   }
 
   function renderTrend(container) {
-    var d = SIK.DATA.trend;
+    var d = Kesdig.DATA.trend;
     var width = Math.max(300, Math.round(container.clientWidth || 640));
     var compact = width < 520;
     var height = compact ? 290 : 340;
@@ -1535,7 +1535,7 @@
   }
 
   function renderPregnant(container) {
-    var data = SIK.DATA.pregnantIndonesia;
+    var data = Kesdig.DATA.pregnantIndonesia;
     var max = 60;
     clear(container);
     var chart = el('div', 'vbar-chart');
@@ -1691,7 +1691,7 @@
     // Langkah menstruasi baru dilewati setelah umur dan jenis kelamin diketahui.
     var identityKnown = !!answers.sex && Number.isInteger(answers.ageYears);
     return ['identitas', 'hb', 'menstruasi', 'makan', 'ttd', 'gejala'].filter(function (id) {
-      return id !== 'menstruasi' || !identityKnown || SIK.isMenstruationRelevant(profileOf(answers));
+      return id !== 'menstruasi' || !identityKnown || Kesdig.isMenstruationRelevant(profileOf(answers));
     });
   }
 
@@ -1716,7 +1716,7 @@
     if (!isChild) {
       $('#f-age-months').value = '';
     }
-    var pregnancyRelevant = SIK.isPregnancyRelevant(profile);
+    var pregnancyRelevant = Kesdig.isPregnancyRelevant(profile);
     setVisible($('#field-pregnant'), pregnancyRelevant);
     if (!pregnancyRelevant) {
       uncheck('pregnant');
@@ -1733,7 +1733,7 @@
     setVisible($('#mens-active-fields'), radioValue('menstruationStatus') === 'active');
     setVisible($('#ttd-yes-fields'), radioValue('ttdUse') === 'yes');
 
-    var target = SIK.ttdTarget(readAnswers());
+    var target = Kesdig.ttdTarget(readAnswers());
     var context = $('#ttd-context');
     if (context) {
       context.textContent = target === 'daily'
@@ -1880,17 +1880,17 @@
       if (!answers.sex) {
         fail('err-sex', 'Pilih jenis kelamin.', 'input[name="sex"]');
       }
-      if (SIK.isPregnancyRelevant(profile) && !answers.pregnant) {
+      if (Kesdig.isPregnancyRelevant(profile) && !answers.pregnant) {
         fail('err-pregnant', 'Pilih status kehamilan.', 'input[name="pregnant"]');
       }
-      if (SIK.isPregnancyRelevant(profile) && answers.pregnant === 'yes' && !answers.trimester) {
+      if (Kesdig.isPregnancyRelevant(profile) && answers.pregnant === 'yes' && !answers.trimester) {
         fail('err-trimester', 'Pilih trimester kehamilan.', 'input[name="trimester"]');
       }
     } else if (id === 'hb') {
       if (!answers.hbKnown) {
         fail('err-hb-known', 'Pilih salah satu jawaban.', 'input[name="hbKnown"]');
       } else if (answers.hbKnown === 'yes') {
-        var parsed = SIK.parseHb(answers.hbValue);
+        var parsed = Kesdig.parseHb(answers.hbValue);
         if (!parsed.ok) {
           fail('err-hb', HB_MESSAGES[parsed.reason], '#f-hb');
         }
@@ -2055,7 +2055,7 @@
       return;
     }
     var answers = readAnswers();
-    lastResult = { result: SIK.evaluate(answers), createdAt: new Date() };
+    lastResult = { result: Kesdig.evaluate(answers), createdAt: new Date() };
     renderReport(lastResult);
     var fill = $('#quiz-progress-fill');
     if (fill) {
@@ -2185,7 +2185,7 @@
       [scale.zones[1].from, scale.zones[2].from, scale.zones[3].from].forEach(function (value) {
         var p = polar(cx, cy, radius + 22, angleFor(value));
         var tick = svgEl('text', { class: 'gauge-tick', x: p[0].toFixed(1), y: (p[1] + 4).toFixed(1) });
-        tick.textContent = SIK.formatHb(value);
+        tick.textContent = Kesdig.formatHb(value);
         zonesGroup.appendChild(tick);
       });
     }
@@ -2221,7 +2221,7 @@
       return;
     }
     if (reducedMotion()) {
-      valueNode.textContent = SIK.formatHb(target);
+      valueNode.textContent = Kesdig.formatHb(target);
       return;
     }
     var from = hb.scale ? hb.scale.min : 0;
@@ -2236,7 +2236,7 @@
       if (t < 1) {
         window.requestAnimationFrame(frame);
       } else {
-        valueNode.textContent = SIK.formatHb(target);
+        valueNode.textContent = Kesdig.formatHb(target);
       }
     }
     window.requestAnimationFrame(frame);
@@ -2259,7 +2259,7 @@
     $('#r-summary').setAttribute('data-category', r.hb.category);
     $('#r-category').textContent = r.hb.label;
     $('#r-category-desc').textContent = describeHb(r);
-    $('#r-hb-value').textContent = r.hb.known ? SIK.formatHb(r.hb.adjusted) : '?';
+    $('#r-hb-value').textContent = r.hb.known ? Kesdig.formatHb(r.hb.adjusted) : '?';
     var caption = $('#r-gauge-caption');
     caption.hidden = !(r.hb.known && r.hb.adjustment.total > 0);
     caption.textContent = 'setelah penyesuaian WHO 2024';
@@ -2270,20 +2270,20 @@
     if (r.hb.thresholds) {
       addKv(facts, 'Ambang tidak anemia', r.hb.thresholds.none + ' g/dL');
     }
-    addKv(facts, 'Hb yang dimasukkan', r.hb.known ? SIK.formatHb(r.hb.measured) + ' g/dL' : 'Belum diketahui');
+    addKv(facts, 'Hb yang dimasukkan', r.hb.known ? Kesdig.formatHb(r.hb.measured) + ' g/dL' : 'Belum diketahui');
     if (r.hb.known && r.hb.adjustment.total > 0) {
       var parts = [];
       if (r.hb.adjustment.elevation) {
-        parts.push('ketinggian −' + SIK.formatHb(r.hb.adjustment.elevation / 10));
+        parts.push('ketinggian −' + Kesdig.formatHb(r.hb.adjustment.elevation / 10));
       }
       if (r.hb.adjustment.smoking) {
-        parts.push('merokok −' + SIK.formatHb(r.hb.adjustment.smoking / 10));
+        parts.push('merokok −' + Kesdig.formatHb(r.hb.adjustment.smoking / 10));
       }
       addKv(facts, 'Penyesuaian WHO', parts.join(', ') + ' g/dL');
-      addKv(facts, 'Hb setelah penyesuaian', SIK.formatHb(r.hb.adjusted) + ' g/dL');
+      addKv(facts, 'Hb setelah penyesuaian', Kesdig.formatHb(r.hb.adjusted) + ' g/dL');
     }
     if (r.hb.known && r.hb.testedWhen) {
-      addKv(facts, 'Waktu pemeriksaan', SIK.LABELS.hbTestedWhen[r.hb.testedWhen]);
+      addKv(facts, 'Waktu pemeriksaan', Kesdig.LABELS.hbTestedWhen[r.hb.testedWhen]);
     }
 
     var profile = $('#r-profile');

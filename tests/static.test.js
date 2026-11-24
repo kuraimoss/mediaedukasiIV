@@ -1,6 +1,6 @@
 'use strict';
 /**
- * Pemeriksaan statis HTML, CSS, dan JavaScript SIK Anemia.
+ * Pemeriksaan statis HTML, CSS, dan JavaScript Kesdig Anemia.
  * Menjaga konsistensi tabel WHO, path aset GitHub Pages, privasi, dan aksesibilitas dasar.
  */
 const { describe, test } = require('node:test');
@@ -14,7 +14,7 @@ const read = (file) => fs.readFileSync(path.join(ROOT, file), 'utf8');
 const html = read('index.html');
 const css = read('style.css');
 const js = read('script.js');
-const SIK = require(path.join(ROOT, 'script.js'));
+const Kesdig = require(path.join(ROOT, 'script.js'));
 
 function decode(text) {
   return text
@@ -98,10 +98,10 @@ describe('index.html', () => {
   });
 
   test('tabel WHO 2024 di halaman sama persis dengan ambang di logika', () => {
-    for (const id of SIK.GROUP_ORDER) {
+    for (const id of Kesdig.GROUP_ORDER) {
       const row = html.match(new RegExp('<tr data-group="' + id + '">([\\s\\S]*?)</tr>'));
       assert.ok(row, `baris ${id}`);
-      const labels = SIK.rangeLabels(id);
+      const labels = Kesdig.rangeLabels(id);
       for (const col of ['none', 'mild', 'moderate', 'severe']) {
         const cell = row[1].match(new RegExp('<td data-col="' + col + '"[^>]*>([^<]*)</td>'));
         assert.ok(cell, `${id} kolom ${col}`);
@@ -114,10 +114,10 @@ describe('index.html', () => {
     const inputs = [...html.matchAll(/<input type="(?:radio|checkbox)" name="([^"]+)" value="([^"]+)"/g)];
     assert.ok(inputs.length > 40);
     for (const [, name, value] of inputs) {
-      assert.ok(SIK.LABELS[name], `label untuk ${name}`);
-      assert.ok(Object.prototype.hasOwnProperty.call(SIK.LABELS[name], value), `${name}=${value}`);
+      assert.ok(Kesdig.LABELS[name], `label untuk ${name}`);
+      assert.ok(Object.prototype.hasOwnProperty.call(Kesdig.LABELS[name], value), `${name}=${value}`);
     }
-    const selects = { elevation: SIK.ELEVATION_ADJ, smoking: SIK.SMOKING_ADJ };
+    const selects = { elevation: Kesdig.ELEVATION_ADJ, smoking: Kesdig.SMOKING_ADJ };
     for (const [name, table] of Object.entries(selects)) {
       const block = html.match(new RegExp('<select[^>]*name="' + name + '"[^>]*>([\\s\\S]*?)</select>'));
       assert.ok(block, `select ${name}`);
@@ -127,7 +127,7 @@ describe('index.html', () => {
   });
 
   test('setiap sumber data dicantumkan dan ditautkan di halaman', () => {
-    for (const source of Object.values(SIK.DATA.sources)) {
+    for (const source of Object.values(Kesdig.DATA.sources)) {
       assert.ok(html.includes(source.url), source.url);
     }
     assert.ok(html.includes('https://www.ncbi.nlm.nih.gov/books/NBK602183/table/fm-ch1.tab2/'));
@@ -135,12 +135,12 @@ describe('index.html', () => {
 
   test('angka statistik di halaman berasal dari DATA bersumber', () => {
     const known = new Set();
-    for (const row of SIK.DATA.comparison.rows) {
+    for (const row of Kesdig.DATA.comparison.rows) {
       known.add(row.indonesia);
       known.add(row.global);
     }
-    for (const row of SIK.DATA.pregnantIndonesia.rows) known.add(row.value);
-    for (const item of SIK.DATA.ttdRemaja.items) known.add(item.value);
+    for (const row of Kesdig.DATA.pregnantIndonesia.rows) known.add(row.value);
+    for (const item of Kesdig.DATA.ttdRemaja.items) known.add(item.value);
     const counts = [...html.matchAll(/data-count="([\d.]+)"/g)].map((m) => Number(m[1]));
     assert.ok(counts.length >= 6);
     for (const value of counts) {
