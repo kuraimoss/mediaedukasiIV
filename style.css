@@ -4364,16 +4364,28 @@ h2:focus,
   }
 
   .float-card {
-    transform: scale(0.86);
+    gap: 8px;
+    padding: 8px 12px 8px 8px;
+    border-radius: 14px;
+  }
+
+  .float-card-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+  }
+
+  .float-card-text strong {
+    font-size: 0.95rem;
   }
 
   .card-a {
-    left: -4%;
+    left: 0;
     top: 0;
   }
 
   .card-b {
-    right: -6%;
+    right: 0;
   }
 
   .card-c {
