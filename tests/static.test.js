@@ -248,6 +248,18 @@ describe('Halaman Kelompok 4', () => {
     });
   });
 
+  test('foto profil bulat 1:1 dengan bingkai lingkaran', () => {
+    const block = (selector) => {
+      const match = css.match(new RegExp('\\n' + selector.replace(/\./g, '\\.') + ' \\{([^}]*)\\}'));
+      return match ? match[1] : '';
+    };
+    assert.equal((page.match(/<div class="member-avatar"><div class="member-photo"><img /g) || []).length, MEMBERS.length);
+    assert.match(block('.member-avatar'), /border-radius: 50%;/);
+    assert.match(block('.member-photo'), /aspect-ratio: 1;/);
+    assert.match(block('.member-photo'), /border-radius: 50%;/);
+    assert.match(block('.member-photo img'), /object-fit: cover;/);
+  });
+
   test('foto anggota berupa WebP yang ringan', () => {
     for (const [, , slug] of MEMBERS) {
       const file = path.join(ROOT, 'assets', 'team', slug + '.webp');
