@@ -3902,41 +3902,34 @@ h2:focus,
   flex: 0 0 calc((100% - var(--team-gap)) / 2);
   display: flex;
   flex-direction: column;
-  align-items: center;
   min-width: 0;
-  padding: 22px 12px 18px;
+  padding: 0;
+  overflow: hidden;
   border-radius: var(--radius-xl);
   background:
     radial-gradient(120% 70% at 50% 0%, var(--primary-soft), transparent 70%),
-    linear-gradient(180deg, var(--surface-2), var(--surface) 80%);
-  text-align: center;
+    linear-gradient(180deg, var(--surface-2), var(--surface) 75%);
 }
 
-/* Cincin gradasi di sekeliling foto */
-.member-avatar {
-  width: min(100%, 220px);
-  padding: 4px;
-  border-radius: 50%;
-  background: linear-gradient(140deg, var(--teal-400), var(--turq-300) 45%, var(--teal-600));
-  box-shadow:
-    0 0 0 6px var(--primary-soft),
-    0 16px 34px -18px rgb(11 31 58 / 55%);
-  transition:
-    transform 0.45s var(--ease-out),
-    box-shadow 0.45s var(--ease-out);
-}
-
-/* Foto bulat 1:1; wajah dipusatkan lewat object-position dan skala, file foto tidak diubah */
 .member-photo {
-  aspect-ratio: 1;
+  position: relative;
+  aspect-ratio: 5 / 6;
   overflow: hidden;
-  border: 4px solid var(--surface);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 50% 28%, var(--surface), transparent 62%),
-    linear-gradient(160deg, var(--primary-soft), rgb(125 231 238 / 22%)),
-    var(--surface-2);
   isolation: isolate;
+}
+
+.member-photo::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -26%;
+  z-index: -1;
+  width: 96%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 42%, rgb(45 212 191 / 30%), rgb(125 231 238 / 14%) 55%, transparent 72%);
+  transform: translateX(-50%);
+  transition: transform 0.6s var(--ease-out);
 }
 
 .member-photo img {
@@ -3944,9 +3937,9 @@ h2:focus,
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 4.5%;
-  transform: scale(1.5);
-  transform-origin: 50% 50%;
+  object-position: center bottom;
+  transform-origin: 50% 100%;
+  transition: transform 0.6s var(--ease-out);
 }
 
 .member-info {
@@ -3956,8 +3949,10 @@ h2:focus,
   align-items: center;
   justify-items: center;
   gap: 8px;
-  width: 100%;
-  margin-top: 16px;
+  padding: 14px 12px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  text-align: center;
 }
 
 .member-name {
@@ -3989,16 +3984,12 @@ h2:focus,
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .member-card.card-spot:hover {
-    transform: none;
+  .member-card:hover .member-photo img {
+    transform: scale(1.06);
   }
 
-  .member-card:hover .member-avatar {
-    transform: scale(1.05);
-    box-shadow:
-      0 0 0 6px var(--primary-soft),
-      0 0 32px rgb(45 212 191 / 45%),
-      0 18px 38px -16px rgb(13 148 136 / 60%);
+  .member-card:hover .member-photo::before {
+    transform: translateX(-50%) scale(1.08);
   }
 }
 
@@ -4009,7 +4000,6 @@ h2:focus,
 
   .member-card {
     flex-basis: calc((100% - 2 * var(--team-gap)) / 3);
-    padding: 28px 18px 24px;
   }
 
   .member-name {
@@ -4017,7 +4007,7 @@ h2:focus,
   }
 
   .member-info {
-    margin-top: 20px;
+    padding: 18px 16px 22px;
   }
 }
 
