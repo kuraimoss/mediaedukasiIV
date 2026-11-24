@@ -1114,7 +1114,7 @@
 
   /* ----- Router berbasis hash ----------------------------------------- */
 
-  var ROUTES = ['beranda', 'informasi', 'data', 'simulasi', 'hasil'];
+  var ROUTES = ['beranda', 'informasi', 'data', 'simulasi', 'hasil', 'kelompok'];
   var BASE_TITLE = doc.title;
   var currentRoute = null;
   var lastResult = null;

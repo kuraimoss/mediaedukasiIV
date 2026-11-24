@@ -205,3 +205,56 @@ describe('script.js', () => {
     assert.match(js, /window\.print\(\)/);
   });
 });
+
+describe('Halaman Kelompok 4', () => {
+  const MEMBERS = [
+    ['Luerina Sinaga', '241000308', 'luerina-sinaga'],
+    ['Rani Ria Delima Ritonga', '241000354', 'rani-ria-delima-ritonga'],
+    ['Jesina Noviani Br Tarigan', '241000275', 'jesina-noviani-br-tarigan'],
+    ['Rehulina Br Barus', '241000286', 'rehulina-br-barus'],
+    ['Rosdiana Hutahaean', '241000352', 'rosdiana-hutahaean'],
+    ['Lydia Jessica Simatupang', '241000360', 'lydia-jessica-simatupang'],
+    ['Caessya Yunita Nainggolan', '241000307', 'caessya-yunita-nainggolan']
+  ];
+  const page = (html.match(/<section class="page" id="page-kelompok"[\s\S]*?<\/section>\s*<\/main>/) || [''])[0];
+
+  test('rute #/kelompok terdaftar di router', () => {
+    assert.match(js, /var ROUTES = \[[^\]]*'kelompok'[^\]]*\]/);
+    assert.ok(page, 'section #page-kelompok');
+    assert.match(page, /data-page="kelompok"/);
+    assert.match(page, /data-title="Kelompok 4"/);
+  });
+
+  test('menu navbar berurutan dan footer memuat Kelompok 4', () => {
+    const order = [...html.matchAll(/data-nav="([^"]+)"/g)].map((m) => m[1]);
+    assert.deepEqual(order, ['beranda', 'informasi', 'data', 'simulasi', 'kelompok']);
+    const footer = html.match(/<footer class="site-footer">[\s\S]*<\/footer>/)[0];
+    assert.match(footer, /<a href="#\/kelompok">Kelompok 4<\/a>/);
+  });
+
+  test('judul dan deskripsi sesuai permintaan', () => {
+    assert.match(page, /<h1[^>]*>Kenali Kelompok 4<\/h1>/);
+    assert.ok(page.includes('Tim pengembang media edukasi Kesehatan Digital Anemia yang berkomitmen meningkatkan pengetahuan dan kesadaran masyarakat mengenai anemia melalui teknologi digital.'));
+  });
+
+  test('tujuh kartu anggota berisi foto, nama, dan NIM sesuai urutan', () => {
+    const cards = [...page.matchAll(/<article class="member-card[^"]*">([\s\S]*?)<\/article>/g)].map((m) => m[1]);
+    assert.equal(cards.length, MEMBERS.length);
+    cards.forEach((card, index) => {
+      const [name, nim, slug] = MEMBERS[index];
+      assert.match(card, new RegExp('<img src="assets/team/' + slug + '\\.webp" alt="Foto ' + name + '" width="600" height="800"'), name);
+      assert.match(card, new RegExp('<h2 class="member-name">' + name + '</h2>'), name);
+      assert.match(card, new RegExp('>' + nim + '<'), nim);
+    });
+  });
+
+  test('foto anggota berupa WebP yang ringan', () => {
+    for (const [, , slug] of MEMBERS) {
+      const file = path.join(ROOT, 'assets', 'team', slug + '.webp');
+      assert.ok(fs.existsSync(file), slug);
+      const head = fs.readFileSync(file).subarray(0, 16).toString('latin1');
+      assert.ok(head.startsWith('RIFF') && head.includes('WEBP'), slug + ' bukan WebP');
+      assert.ok(fs.statSync(file).size < 150 * 1024, slug + ' lebih dari 150 KB');
+    }
+  });
+});
