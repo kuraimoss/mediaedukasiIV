@@ -28,6 +28,9 @@ mediaedukasiIV/
 ├── index.html              # Seluruh halaman (router berbasis hash: #/, #/informasi, #/data, #/simulasi, #/hasil)
 ├── style.css               # Token desain, komponen, animasi, tema gelap, stylesheet cetak A4
 ├── script.js               # Logika skrining murni (diuji) + antarmuka
+├── animations.css          # Sistem animasi: latar global, hero, navigasi, kartu, kuis, hasil, Kelompok 4
+├── animations.js           # Interaksi animasi: indikator navigasi, tilt 3D, ripple, parallax, kontrol animasi
+├── background-effects.js   # Latar Canvas: partikel dan sel darah merah melayang
 ├── assets/
 │   ├── images/og-image.jpg # Gambar pratinjau tautan
 │   └── icons/favicon.svg
@@ -39,6 +42,13 @@ mediaedukasiIV/
 ├── package.json            # Hanya skrip pemeriksaan; situs tidak butuh dependensi
 └── README.md
 ```
+
+## Sistem animasi
+
+- **Latar global**: gradient mesh, orb gradasi, cahaya ambient (CSS), serta partikel dan sel darah merah melayang (Canvas) dengan parallax mouse yang halus. Latar berada di belakang konten (`pointer-events: none`).
+- **Interaksi**: teks hero muncul per kata, tombol CTA berbingkai beranimasi, indikator menu yang bergeser, hamburger beranimasi, transisi antarhalaman, tilt 3D dan border gradasi pada kartu, ripple pada tombol dan pilihan kuis, animasi oksigen di halaman Informasi, serta stagger pada laporan hasil.
+- **Performa**: animasi memakai `transform` dan `opacity`; Canvas berhenti saat tab tidak aktif, memakai lebih sedikit objek di ponsel, dan efek mouse hanya aktif untuk pointer presisi.
+- **Aksesibilitas**: menghormati `prefers-reduced-motion`; tombol jeda di header mematikan animasi dekoratif selama sesi; semua animasi berhenti saat dicetak. Peringatan tanda bahaya selalu tampil seketika.
 
 ## Menjalankan secara lokal
 
@@ -107,7 +117,7 @@ Statistik tidak dibuat-buat: setiap angka di situs berasal dari sumber di atas d
 
 Workflow `.github/workflows/deploy.yml` berjalan pada setiap push ke `main` dan dapat dijalankan manual (`workflow_dispatch`):
 
-1. **check**: validasi HTML, lint CSS, pemeriksaan JavaScript, tes logika skrining, lalu menyusun artefak `_site` yang hanya berisi `index.html`, `style.css`, `script.js`, dan `assets/` (tanpa `.git`, `.github`, maupun file konfigurasi).
+1. **check**: validasi HTML, lint CSS, pemeriksaan JavaScript, tes logika skrining, lalu menyusun artefak `_site` yang hanya berisi `index.html`, file CSS dan JavaScript situs (`style.css`, `animations.css`, `script.js`, `animations.js`, `background-effects.js`), dan `assets/` (tanpa `.git`, `.github`, maupun file konfigurasi).
 2. **deploy**: hanya berjalan bila pemeriksaan berhasil, memakai action resmi `actions/deploy-pages` dengan environment `github-pages`, lalu menguji situs online.
 
 GitHub Pages harus memakai sumber **GitHub Actions**: *Settings → Pages → Build and deployment → Source: GitHub Actions*.

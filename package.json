@@ -6,8 +6,8 @@
   "scripts": {
     "test": "node --test \"tests/*.test.js\"",
     "lint:html": "npx --yes html-validate@11.21.1 index.html",
-    "lint:css": "npx --yes stylelint@18.1.0 style.css",
-    "lint:js": "node --check script.js && npx --yes eslint@10.15.0 script.js tests",
+    "lint:css": "npx --yes stylelint@18.1.0 style.css animations.css",
+    "lint:js": "node --check script.js && node --check animations.js && node --check background-effects.js && npx --yes eslint@10.15.0 script.js animations.js background-effects.js tests",
     "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
     "check": "npm run lint && npm test"
   },

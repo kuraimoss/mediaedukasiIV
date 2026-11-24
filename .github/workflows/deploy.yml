@@ -43,7 +43,7 @@ jobs:
       - name: Susun artefak (hanya file publik situs)
         run: |
           mkdir -p _site
-          cp index.html style.css script.js _site/
+          cp index.html *.css *.js _site/
           cp -R assets _site/assets
           echo "Isi artefak yang akan dipublikasikan:"
           find _site -type f | sort
@@ -76,6 +76,9 @@ jobs:
             if curl -fsSL "$PAGE_URL" | grep -q "Kesdig Anemia"; then
               curl -fsSL -o /dev/null "${PAGE_URL}style.css"
               curl -fsSL -o /dev/null "${PAGE_URL}script.js"
+              curl -fsSL -o /dev/null "${PAGE_URL}animations.css"
+              curl -fsSL -o /dev/null "${PAGE_URL}animations.js"
+              curl -fsSL -o /dev/null "${PAGE_URL}background-effects.js"
               curl -fsSL -o /dev/null "${PAGE_URL}assets/icons/favicon.svg"
               echo "Situs online dan aset utama termuat: $PAGE_URL"
               exit 0

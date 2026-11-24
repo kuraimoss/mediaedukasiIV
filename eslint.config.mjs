@@ -3,7 +3,8 @@
 
 const browserGlobals = [
   'window', 'document', 'requestAnimationFrame', 'IntersectionObserver', 'ResizeObserver',
-  'getComputedStyle', 'setTimeout', 'clearTimeout', 'Intl', 'globalThis'
+  'getComputedStyle', 'setTimeout', 'clearTimeout', 'Intl', 'globalThis',
+  'CustomEvent', 'MutationObserver'
 ];
 
 const rules = {
@@ -32,7 +33,7 @@ const rules = {
 
 export default [
   {
-    files: ['script.js'],
+    files: ['script.js', 'animations.js', 'background-effects.js'],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'script',

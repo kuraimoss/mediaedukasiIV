@@ -6,7 +6,14 @@
     "color-no-invalid-hex": true,
     "comment-no-empty": true,
     "declaration-block-no-duplicate-custom-properties": true,
-    "declaration-block-no-duplicate-properties": [true, { "ignore": ["consecutive-duplicates-with-different-syntaxes"] }],
+    "declaration-block-no-duplicate-properties": [
+      true,
+      {
+        "ignore": [
+          "consecutive-duplicates-with-different-syntaxes"
+        ]
+      }
+    ],
     "declaration-block-no-shorthand-property-overrides": true,
     "declaration-property-value-no-unknown": true,
     "font-family-no-duplicate-names": true,
@@ -28,5 +35,15 @@
     "selector-type-no-unknown": true,
     "string-no-newline": true,
     "unit-no-unknown": true
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "animations.css"
+      ],
+      "rules": {
+        "no-unknown-custom-properties": null
+      }
+    }
+  ]
 }

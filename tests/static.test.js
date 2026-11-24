@@ -84,7 +84,11 @@ describe('index.html', () => {
 
   test('tidak ada skrip pihak ketiga atau analytics', () => {
     const scripts = [...html.matchAll(/<script\b[^>]*>/g)].map((m) => m[0]);
-    assert.deepEqual(scripts, ['<script src="script.js" defer>']);
+    assert.deepEqual(scripts, [
+      '<script src="script.js" defer>',
+      '<script src="animations.js" defer>',
+      '<script src="background-effects.js" defer>'
+    ]);
     assert.doesNotMatch(html, /google-analytics|googletagmanager|gtag\(|facebook\.net|hotjar|clarity\.ms/i);
   });
 
@@ -256,5 +260,59 @@ describe('Halaman Kelompok 4', () => {
       assert.ok(head.startsWith('RIFF') && head.includes('WEBP'), slug + ' bukan WebP');
       assert.ok(fs.statSync(file).size < 150 * 1024, slug + ' lebih dari 150 KB');
     }
+  });
+});
+
+describe('Sistem animasi', () => {
+  const readIfExists = (file) => (fs.existsSync(path.join(ROOT, file)) ? read(file) : '');
+  const animCss = readIfExists('animations.css');
+  const animJs = readIfExists('animations.js');
+  const bgJs = readIfExists('background-effects.js');
+
+  test('animations.css dimuat setelah style.css', () => {
+    const links = [...html.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)]
+      .map((m) => m[1])
+      .filter((href) => !href.startsWith('http'));
+    assert.deepEqual(links, ['style.css', 'animations.css']);
+  });
+
+  test('skrip animasi valid dan tidak menyimpan atau mengirim data', () => {
+    for (const [name, code] of [['animations.js', animJs], ['background-effects.js', bgJs]]) {
+      assert.ok(code.length > 0, name + ' ada');
+      assert.doesNotThrow(() => new vm.Script(code, { filename: name }));
+      assert.doesNotMatch(code, /localStorage|sessionStorage|indexedDB|document\.cookie|navigator\.sendBeacon|XMLHttpRequest|\bfetch\s*\(|WebSocket|EventSource|\.innerHTML\s*=/);
+    }
+  });
+
+  test('menghormati prefers-reduced-motion, opsi matikan animasi, dan mode cetak', () => {
+    assert.match(animCss, /prefers-reduced-motion:\s*reduce/);
+    assert.match(animCss, /\[data-motion="off"\]/);
+    assert.match(animCss, /@media print[\s\S]*\.ambient[\s\S]*display:\s*none/);
+    assert.match(html, /<button[^>]*id="motion-toggle"[^>]*aria-pressed="false"/);
+    assert.match(animJs, /data-motion/);
+  });
+
+  test('latar global tidak menghalangi interaksi', () => {
+    assert.match(html, /<div class="ambient" aria-hidden="true">/);
+    assert.match(html, /<canvas class="ambient-canvas"/);
+    const ambient = animCss.match(/\n\.ambient \{([^}]*)\}/);
+    assert.ok(ambient, 'aturan .ambient');
+    assert.match(ambient[1], /position: fixed;/);
+    assert.match(ambient[1], /pointer-events: none;/);
+  });
+
+  test('canvas latar berhenti saat tab tidak aktif dan lebih ringan di ponsel', () => {
+    assert.match(bgJs, /visibilitychange/);
+    assert.match(bgJs, /cancelAnimationFrame/);
+    assert.match(bgJs, /prefers-reduced-motion/);
+    assert.match(bgJs, /pointer: coarse/);
+  });
+
+  test('efek mengikuti mouse hanya untuk pointer presisi', () => {
+    assert.match(animJs, /\(hover: hover\) and \(pointer: fine\)/);
+  });
+
+  test('peringatan tanda bahaya tidak ditunda animasi', () => {
+    assert.doesNotMatch(animCss, /(#danger-alert|\.report-urgent|#r-urgent)[^{]*\{[^}]*animation-delay/);
   });
 });

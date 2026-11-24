@@ -1117,6 +1117,7 @@
   var ROUTES = ['beranda', 'informasi', 'data', 'simulasi', 'hasil', 'kelompok'];
   var BASE_TITLE = doc.title;
   var currentRoute = null;
+  var routeToken = 0;
   var lastResult = null;
   var routeHooks = {};
 
@@ -1146,9 +1147,6 @@
     if (!page) {
       return;
     }
-    $$('.page').forEach(function (section) {
-      section.classList.toggle('is-active', section === page);
-    });
     $$('[data-nav]').forEach(function (link) {
       if (link.getAttribute('data-nav') === name) {
         link.setAttribute('aria-current', 'page');
@@ -1159,15 +1157,35 @@
     doc.title = name === 'beranda' ? BASE_TITLE : page.getAttribute('data-title') + ' · Kesdig Anemia';
     var firstLoad = currentRoute === null;
     currentRoute = name;
-    if (!firstLoad) {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-      var heading = page.querySelector('h1');
-      if (heading) {
-        heading.focus({ preventScroll: true });
+    var token = ++routeToken;
+    var leaving = $('.page.is-active');
+    // Hasil yang darurat tampil seketika agar peringatan tidak tertunda animasi.
+    var instant = name === 'hasil' && lastResult && lastResult.result.urgent;
+    function activate() {
+      if (token !== routeToken) {
+        return;
+      }
+      $$('.page').forEach(function (section) {
+        section.classList.remove('is-leaving');
+        section.classList.toggle('is-instant', section === page && !!instant);
+        section.classList.toggle('is-active', section === page);
+      });
+      if (!firstLoad) {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        var heading = page.querySelector('h1');
+        if (heading) {
+          heading.focus({ preventScroll: true });
+        }
+      }
+      if (routeHooks[name]) {
+        routeHooks[name]();
       }
     }
-    if (routeHooks[name]) {
-      routeHooks[name]();
+    if (!firstLoad && !instant && leaving && leaving !== page && !reducedMotion()) {
+      leaving.classList.add('is-leaving');
+      setTimeout(activate, 170);
+    } else {
+      activate();
     }
   }
 
@@ -1437,7 +1455,13 @@
     svg.appendChild(axis);
     svg.appendChild(svgEl('path', { class: 'trend-band-glb', d: bandPath(d.global.low, d.global.high) }));
     svg.appendChild(svgEl('path', { class: 'trend-band-idn', d: bandPath(d.indonesia.low, d.indonesia.high) }));
-    svg.appendChild(svgEl('path', { class: 'trend-line trend-line-glb is-dashed', d: linePath(d.global.value) }));
+    // Garis global putus-putus "digambar" lewat mask agar ikut beranimasi seperti garis Indonesia.
+    var defs = svgEl('defs', {});
+    var mask = svgEl('mask', { id: 'trend-glb-mask', maskUnits: 'userSpaceOnUse', x: '0', y: '0', width: String(width), height: String(height) });
+    mask.appendChild(svgEl('path', { class: 'trend-mask-line', d: linePath(d.global.value), pathLength: '1' }));
+    defs.appendChild(mask);
+    svg.appendChild(defs);
+    svg.appendChild(svgEl('path', { class: 'trend-line trend-line-glb is-dashed is-masked', d: linePath(d.global.value), mask: 'url(#trend-glb-mask)' }));
     svg.appendChild(svgEl('path', { class: 'trend-line trend-line-idn', d: linePath(d.indonesia.value), pathLength: '1' }));
 
     var ends = svgEl('g', { class: 'trend-end', 'aria-hidden': 'true' });
@@ -1702,8 +1726,14 @@
   }
 
   function setVisible(node, visible) {
-    if (node) {
-      node.hidden = !visible;
+    if (!node) {
+      return;
+    }
+    var wasHidden = node.hidden;
+    node.hidden = !visible;
+    // Ekspansi halus untuk pertanyaan kondisional; peringatan bahaya selalu tampil seketika.
+    if (visible && wasHidden && node.id !== 'danger-alert' && window.KesdigMotion) {
+      window.KesdigMotion.expand(node);
     }
   }
 
@@ -1793,6 +1823,23 @@
     var fill = $('#quiz-progress-fill');
     if (fill) {
       fill.style.setProperty('--p', ratio.toFixed(3));
+    }
+    var ring = $('#quiz-ring');
+    if (ring) {
+      ring.style.setProperty('--p', ratio.toFixed(3));
+    }
+    var dots = $('#step-dots');
+    if (dots) {
+      if (dots.children.length !== total) {
+        clear(dots);
+        for (var k = 0; k < total; k += 1) {
+          dots.appendChild(el('li'));
+        }
+      }
+      Array.prototype.forEach.call(dots.children, function (dot, position) {
+        dot.classList.toggle('is-done', position < index);
+        dot.classList.toggle('is-current', position === index);
+      });
     }
     $$('#quiz-steps li').forEach(function (item) {
       var stepId = item.getAttribute('data-step');
@@ -2207,6 +2254,14 @@
     var valueNode = $('#r-hb-value');
     var target = hb.known ? hb.adjusted : null;
     renderGauge(hb);
+    var motion = window.KesdigMotion;
+    if (motion) {
+      motion.pop($('#r-category'));
+      motion.stagger($('#r-hb-facts'));
+      motion.stagger($('.report-grid'));
+      motion.stagger($('#r-factors'));
+      motion.stagger($('#r-recs'));
+    }
     window.requestAnimationFrame(function () {
       window.requestAnimationFrame(function () {
         wrap.classList.add('is-drawn');
